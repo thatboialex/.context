@@ -4,7 +4,7 @@ For the person writing the code. Goal, phases and decisions are in [network-shar
 
 ## Share addresses
 
-File: `/data/snes9x/shares.txt`. One address per line, `#` starts a comment, at most 8 shares. The app creates a commented template when the file is missing and never rewrites a file it did not create (until Phase 5 adds editing, which writes atomically through `.part`).
+File: `/data/snes9x/shares.txt`. One address per line, `#` starts a comment, at most 8 shares. The app creates a commented template when the file is missing and never rewrites the file at load. Settings > Network shares ([ADR 003](./decisions/003-network-shares-screen.md)) edits it one line at a time (replace, append, delete), keeps every other byte, and writes atomically through `.part`.
 
 ```
 smb://192.168.1.50/games/snes                            guest

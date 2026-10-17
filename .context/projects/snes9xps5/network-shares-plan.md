@@ -76,7 +76,7 @@ Each phase is its own PR to `snes9xPS5`. Phase 0 is not merged.
 |---|---|---|---|
 | D1 | Backend order | SMB first (your stated need), NFS second. Swap if the libsmb2 spike fails. | NFS first: proven on this toolchain by SwanStationPS5. |
 | D2 | Reuse SwanStationPS5 code? | No. Reimplement from the design (GPL vs MIT, ADR 001). Vendor only libsmb2 and libnfs. | Ask darkxex for permission to adapt `nfs.cpp`. |
-| D3 | How shares are added | `/data/snes9x/shares.txt` plus a read-only Network screen. Keyboard in Phase 5. | Build the keyboard first. |
+| D3 | How shares are added | `/data/snes9x/shares.txt` plus a Settings > Network shares screen that adds, edits, tests and removes shares with a pad-driven keyboard ([ADR 003](./decisions/003-network-shares-screen.md)). Jason asked for the screen ahead of Phase 5. | Edit the file over FTP only. |
 | D4 | Passwords | Plain text in `shares.txt` (the console has no secret store); redacted in logs and screens. Guest access works with none. | Ask at connect time (needs the keyboard). |
 | D5 | Local ROM cache | Off. Fetch into memory at every launch. | LRU folder under `/data/snes9x/netcache`, capped. |
 | D6 | Server names | IPs and DNS names. NetBIOS names not supported; docs say use the IP. | Add NetBIOS or mDNS lookup later. |
