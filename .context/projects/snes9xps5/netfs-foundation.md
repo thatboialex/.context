@@ -38,7 +38,8 @@ Status 2026-10-17: draft PR [snes9xPS5#7](https://github.com/thatboialex/snes9xP
 15. **`netfs_prepare_game(rom)`** (before `LoadROM`) lists the ROM's folder, fetches `<rom>.msu` / `msu1.rom` whole, the first 128 KiB of up to 64 tracks (waits up to 3 s for the heads) and pins each track's loop-point block. `netfs_end_game()` releases them. The ROM itself is not prefetched: the loader's sequential reads start the read-ahead.
 16. **No 64-bit wraps on the console.** The SDK's libc has no `fopen64`, `fseeko64`, `ftello64`; wrapping them left `__real_*` undefined at link. minizip maps them to the plain calls on FreeBSD targets (`unzip/ioapi.h`). `NETFS_WRAPPED_LFS64` (glibc only) also carries `stat64 lstat64 fstat64 readdir64 open64 pread64 lseek64`: on the host, code that includes `ioapi.h` before the system headers gets those names.
 17. **The frontend, not `OrbisRomRoots()`, adds network roots.** `fe::RomRoots()` = `OrbisRomRoots()` + `netfs_mount_points()`, because `orbis_paths.cpp` is also linked into the helper and installer, which have no netfs. The shelf scans at once, then every 0.5 s compares the connected mount points with those it scanned and, on a change, scans again keeping the selected game (`fe_shelf.cpp`). Games on a share get a `NET` badge (`GameInfo::on_network`).
-18. **Network ROMs are named without reading them:** file name chain, plus a CRC already in `crc-cache.txt`. `CrcCache::Save()` keeps `/smb/` and `/nfs/` entries. Reading every ROM over the network for a CRC is what would make a scan slow.
+18. **Network ROMs are named without reading them:** file name chain, plus a CRC already in `crc-cache.txt`. `CrcCache::Save()` keeps `/smb/` and `/nfs/` entries. Reading every ROM over the network for a CRC is what would make a scan slow. Games left with only a file-name guess are `crc_pending`; `fe::NetNaming` (a local of `Shelf()`) reads them one at a time on a worker, writes each CRC to the shared cache (saved every 20), and stops when the shelf is left or a game starts (`netfs_realtime`). The shelf scans again when the pass is done, or a minute after the last look, keeping the selection.
+18a. **Covers for games that appear late:** the shelf refresh calls `CoverService::Start` again with the new list (host, and the console when the helper downloads in the background), and on the console without a background helper `CoversRestartIfNeeded` writes `wanted.txt` including them, so the next start's prefetch has the covers before the shelf (it restarts once at most, with the existing two-minute guard).
 19. **Notices:** `netfs_take_events()` queues "Connected to ...", the failed-mount sentence, "The connection to ... was lost."; the shelf and the game loop (every 60 frames) show them with `ProsperoNotify` and log them as `[net]` in `boot.log`. A failed launch of a network ROM shows `netfs_last_error()` in the message box.
 20. **Left to the backend work:** the `fcntl`/`SO_NBIO` wrap and the `getaddrinfo` shim (spike S2), `config.h` and flags for libsmb2/libnfs (`LIBSMB2_FLAGS`, `LIBNFS_FLAGS` are starting points).
 
@@ -48,10 +49,10 @@ Status 2026-10-17: draft PR [snes9xPS5#7](https://github.com/thatboialex/snes9xP
 - Everything on hardware (plan rules 1-7).
 
 - Block sizes, the 16 MiB whole-file limit, the 32 MiB budget and the 3 s head wait are starting values from the spec; Phase 4 measures them.
-- Covers for games that appear on the shelf after the first scan: the console restarts the app to prefetch missing covers, which only happens at the shelf's entry. A network game with no cached cover shows "no cover" until the next start.
+- Covers on the console for games that appear after the first scan rely on `CoversRestartIfNeeded` (restart, then prefetch) or the background helper; only the host path (the shelf's own downloads) is tested.
 
 ## Next
 
 1. SMB backend and NFS backend (parallel PRs), then S4 (a real read on the console) and S5 (how much can be allocated).
-2. A background CRC pass for network ROMs whose file name is not a No-Intro name (it must stop when a game starts: `netfs_realtime()`), and a Network page in Settings (state, last error, "Rescan").
-3. README section for players (shares.txt, SMB, NFS).
+2. A Network page in Settings (state, last error, "Rescan"): postponed, there is no on-screen keyboard yet and `shares.txt` is the v1 way.
+3. README section for players (shares.txt, SMB, NFS): written, in the root README.
