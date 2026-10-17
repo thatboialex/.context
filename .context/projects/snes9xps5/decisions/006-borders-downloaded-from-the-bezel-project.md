@@ -47,7 +47,7 @@ No source is clearly redistributable for per-game SNES art. The only per-game se
 ## Consequences
 
 ### Positive
-- Per-game art for about 56% of the No-Intro SNES names (2388 of 4268, measured with the real matcher: 1286 by exact name, 1102 by region, revision or translation matching), nearly all USA and Europe releases; Japan-only games (1469 of the 1880 without) keep the default or built-in frame.
+- Per-game art for about 56% of the No-Intro SNES names (2388 of 4268, measured with the real matcher: 1286 by exact name, 1102 by region, revision or translation matching), nearly all USA and Europe releases; Japan-only games (1469 of the 1880 without) keep the default or built-in frame. **Amended 2026-10-17:** that read only `bezelproject-SNES`; the Japan, Europe and other regions' borders are in the sibling `bezelproject-SFC` (same format, no name in common, same licence position), and the index now lists both: 4149 of 4268, Japan 1837 of 1870. See `borders-download.md`.
 - The user's own pictures still win; the drop-in works as before.
 - One more lane in the helper's existing download loop; no new thread in the helper, no second TLS client.
 
