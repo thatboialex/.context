@@ -6,7 +6,7 @@ Status: Built and on snes9xPS5 `main`, 2026-10-17 (seam #14, renderer #17, pack 
 
 While a game runs, the area around the SNES picture shows art: a frame the game or the console would have had, instead of black bars. The picture sits in a window of the art. It must cost the emulation nothing measurable, work with every shader and aspect ratio, and be easy to extend by dropping files on the console.
 
-Non-goals (first release): downloading art, animated borders, art drawn over the picture (except the corners and edge pixels of the glass inside the window), changing the shelf, a border editor.
+Non-goals (first release): downloading art (added later, phase D), animated borders, art drawn over the picture (except the corners and edge pixels of the glass inside the window), changing the shelf, a border editor.
 
 ## What SwanStationPS5 does (read 2026-10-17, commit `f7bea88`, GPL: design only, no code copied)
 
@@ -76,7 +76,7 @@ Everything shares two small interfaces, written down in [borders-spec.md](./bord
 
 Merge order: A's seam first (minutes), then A, B and C in any order. Shared files, resolved: the seam commit is the one exception to the ownership table (A alone adds the stub `fe_border.*`, its Makefile line and the placeholder `default.png`); once it is on `main` the Makefile is B's (C adds only an asset path B's `-D` flag already names) and A touches none of those files; `fe_settings.*` is A's for the seam and C only reads it; `run-tests.sh` is appended to by A, B and C, each at the end with its own group comment and number (read the last one first; on a conflict keep both blocks).
 
-Phase D, after A to C merge and Jason confirms it on the console: on-demand download through the helper (a `borders/wanted.txt` queue, `snes-border-index.txt`, `fe_coverworker.cpp`), off by default, after the licence of the Bezel Project art is settled with Jason. Not started until he asks.
+Phase D, after A to C merge and Jason confirms it on the console: on-demand download through the helper (a `borders/wanted.txt` queue, `snes-border-index.txt`, `fe_coverworker.cpp`). Built 2026-10-17 after Jason asked for per-game borders: see [borders-download.md](./borders-download.md) and [ADR 006](./decisions/006-borders-downloaded-from-the-bezel-project.md). It follows SwanStationPS5 (download, never bundle) and works under Border Auto only; the licence of the Bezel Project art stays Jason's call.
 
 ## Acceptance
 
