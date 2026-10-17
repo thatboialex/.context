@@ -64,4 +64,5 @@ Update this table in the same change as the work.
 |---|---|---|
 | 0 | Draft PR (findings written) | [findings.md](./findings.md) |
 | 2 | Draft PR (D1 kept at `user/sdmc`) | [ProsperoEden #6](https://github.com/thatboialex/ProsperoEden/pull/6) |
-| 1, 3 to 8 | Not started | |
+| 4 | Draft PR (stacked on #6) | [ProsperoEden #7](https://github.com/thatboialex/ProsperoEden/pull/7) |
+| 1, 3, 5 to 8 | Not started | |
