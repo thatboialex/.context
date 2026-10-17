@@ -2,7 +2,7 @@
 
 What the first netfs PR on `thatboialex/snes9xPS5` built, and the choices in it. Goal and phases: [network-shares-plan.md](./network-shares-plan.md). Details: [network-shares-spec.md](./network-shares-spec.md). Code: `ps5/netfs/`, tests `ps5/tests/test_netfs.cpp` (group 27).
 
-Status 2026-10-17: draft PR [snes9xPS5#7](https://github.com/thatboialex/snes9xPS5/pull/7). The SMB and NFS backends are separate PRs against `netfs/netfs_backend.h`. The cache and the app wiring (boot, shelf, menu, launch) are in the same PR; with a backend that connects, the feature works end to end on the host (test group 28). Nothing has run on the console.
+Status 2026-10-17: merged into main as [snes9xPS5#7](https://github.com/thatboialex/snes9xPS5/pull/7), followed by the NFS backend (#6), the SMB backend (#8) and the shares screen (#10), all against `netfs/netfs_backend.h`. The cache and the app wiring (boot, shelf, menu, launch) are in #7; the feature works end to end on the host (test groups 28, 29). Nothing has run on the console.
 
 ## Files
 
