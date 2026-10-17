@@ -45,6 +45,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [swanstation-nfs-reference.md](./swanstation-nfs-reference.md) | You implement or review anything copied in spirit from SwanStationPS5. |
 | [network-shares-plan.md](./network-shares-plan.md) | You work on SMB/NFS loading: goal, design, phases, open decisions. |
 | [network-shares-spec.md](./network-shares-spec.md) | You write the code: address format, per-file changes, tests, risks. |
+| [netfs-foundation.md](./netfs-foundation.md) | You touch `ps5/netfs/`: what exists, the choices made, what is unverified. |
 | [decisions/001-network-rom-loading.md](./decisions/001-network-rom-loading.md) | You question why netfs is built the way it is. |
 
 ## Status
@@ -52,3 +53,4 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | Date | State |
 |---|---|
 | 2026-10-17 | Network shares: plan written, no code. Next step is Phase 0 (spikes) in the plan. |
+| 2026-10-17 | Network shares: shared netfs layer in draft PR snes9xPS5#7; SMB and NFS backends in sibling PRs. Cache and app wiring next. |
