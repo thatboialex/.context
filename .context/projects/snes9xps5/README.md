@@ -53,4 +53,4 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | Date | State |
 |---|---|
 | 2026-10-17 | Network shares: plan written, no code. Next step is Phase 0 (spikes) in the plan. |
-| 2026-10-17 | Network shares: shared netfs layer in draft PR snes9xPS5#7; SMB and NFS backends in sibling PRs. Cache and app wiring next. |
+| 2026-10-17 | Network shares: shared netfs layer, cache and app wiring in draft PR snes9xPS5#7 (works end to end on the host); SMB and NFS backends in sibling PRs. Console behaviour unverified. |
