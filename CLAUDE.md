@@ -10,6 +10,7 @@ This repo teaches the **.context method**: documentation-as-code-as-context, tun
 ## Projects (when the task names one)
 
 - `snes9xps5` = `thatboialex/snes9xPS5` → read `.context/projects/snes9xps5/README.md` first. Its rules override the web-service defaults above. Plans and notes for it go in that folder.
+- `prosperoeden` = `thatboialex/ProsperoEden` → read `.context/projects/prosperoeden/README.md` first. Its rules override the web-service defaults above. Plans, phases and notes for it go in that folder.
 
 ## Path-scoped rules (load when touching matching files)
 
