@@ -55,6 +55,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [decisions/003-network-shares-screen.md](./decisions/003-network-shares-screen.md) | You touch the Network shares screen, the keyboard or how `shares.txt` is edited. |
 | [decisions/004-shelf-tabs-network-tab.md](./decisions/004-shelf-tabs-network-tab.md) | You touch the shelf's tabs, the Network tab's states or its Square scan; what was and was not taken from PSFlycast. |
 | [cheats.md](./cheats.md) | You touch cheat loading, saving or the cheat menu: where `.cht` files are found, and how a changed file reaches the running game. |
+| [install-and-icons.md](./install-and-icons.md) | You touch the installer or `ProsperoMigrate`, or Jason sees a second Snes9x icon: what a send writes, what stays fixed, what makes a second icon. |
 
 ## Status
 
@@ -67,3 +68,4 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | 2026-10-17 | Network shares: the shared layer, cache, app wiring (CRC naming, late covers), NFS and SMB backends and the shares screen are on main (snes9xPS5 #7, #6, #8, #10), CI green. Nothing has run on a console yet; `.msu1` packs on a share are not prefetched. |
 | 2026-10-17 | Shelf tabs (Internal, USB, Network) and a PSFlycast-style Network tab: draft PR in snes9xPS5, host tests pass, unverified on console. Jason confirmed on the console that playing from a share works. |
 | 2026-10-17 | Cheats reload by themselves: a code added to the `.cht` file while a game runs (or with the cheat menu open) is applied without a restart. Draft PR in snes9xPS5, host-tested, console unverified. See [cheats.md](./cheats.md). |
+| 2026-10-17 | Second icon after installing a build: the installer, CI and `param.json` use one fixed title ID, so a new build updates `/data/homebrew/PPSA99922` in place; the installer now names every other folder carrying our content ID. Cause on the console not found yet. Draft PR in snes9xPS5, console unverified. See [install-and-icons.md](./install-and-icons.md). |
