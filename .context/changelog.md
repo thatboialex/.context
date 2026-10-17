@@ -97,6 +97,17 @@ Log changes when:
 
 ---
 
+## [2026-10-17] - snes9xPS5 project context
+
+### Added
+- `projects/snes9xps5/`: project README (hard rules, terms), architecture map, SwanStationPS5 reference study, network-shares plan and spec, ADR 001
+- Pointer to `projects/<name>/README.md` in `CLAUDE.md` and `AGENTS.md`
+
+### Changed
+- Nothing in the generic template. Project rules override its web-service defaults
+
+---
+
 ## Future Changes
 
 Log template for upcoming changes:

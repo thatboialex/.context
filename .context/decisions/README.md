@@ -44,6 +44,8 @@ What becomes easier or more difficult to do because of this change?
 | [003](./003-postgresql-database.md) | Use PostgreSQL as Primary Database | Accepted | 2024-01-15 |
 | [004](./004-research-backed-pivot.md) | Pivot to Research-Backed Two-Tier Methodology | Accepted | 2026-04-21 |
 
+Project ADRs live in `.context/projects/<name>/decisions/` and are numbered from 001 per project (for example [snes9xps5 ADR-001](../projects/snes9xps5/decisions/001-network-rom-loading.md)).
+
 ## Creating a New ADR
 
 1. Copy the template above
