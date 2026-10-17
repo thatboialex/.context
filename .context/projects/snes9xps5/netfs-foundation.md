@@ -40,6 +40,8 @@ Status 2026-10-17: draft PR [snes9xPS5#7](https://github.com/thatboialex/snes9xP
 17. **The frontend, not `OrbisRomRoots()`, adds network roots.** `fe::RomRoots()` = `OrbisRomRoots()` + `netfs_mount_points()`, because `orbis_paths.cpp` is also linked into the helper and installer, which have no netfs. The shelf scans at once, then every 0.5 s compares the connected mount points with those it scanned and, on a change, scans again keeping the selected game (`fe_shelf.cpp`). Games on a share get a `NET` badge (`GameInfo::on_network`).
 18. **Network ROMs are named without reading them:** file name chain, plus a CRC already in `crc-cache.txt`. `CrcCache::Save()` keeps `/smb/` and `/nfs/` entries. Reading every ROM over the network for a CRC is what would make a scan slow. Games left with only a file-name guess are `crc_pending`; `fe::NetNaming` (a local of `Shelf()`) reads them one at a time on a worker, writes each CRC to the shared cache (saved every 20), and stops when the shelf is left or a game starts (`netfs_realtime`). The shelf scans again when the pass is done, or a minute after the last look, keeping the selection.
 18a. **Covers for games that appear late:** the shelf refresh calls `CoverService::Start` again with the new list (host, and the console when the helper downloads in the background), and on the console without a background helper `CoversRestartIfNeeded` writes `wanted.txt` including them, so the next start's prefetch has the covers before the shelf (it restarts once at most, with the existing two-minute guard).
+18b. **A lost connection is noticed at once, not only by the watchdog.** After a failed Stat/List/Open/Read, `Share::CheckLost` marks the share Dead (event "connection lost", no longer a root) for `ErrKind::Closed` and for `ENOTCONN ECONNRESET ECONNABORTED EPIPE ENETDOWN ENETUNREACH EHOSTUNREACH ETIMEDOUT`. `EIO` is ambiguous (a dead link or one unreadable file), so it is checked with a stat of the location: only if that fails too is the share lost. (Codex review of PR #7.)
+18c. **Case:** the cache's case-insensitive name fallback applies to SMB only; NFS names are exact.
 19. **Notices:** `netfs_take_events()` queues "Connected to ...", the failed-mount sentence, "The connection to ... was lost."; the shelf and the game loop (every 60 frames) show them with `ProsperoNotify` and log them as `[net]` in `boot.log`. A failed launch of a network ROM shows `netfs_last_error()` in the message box.
 20. **Left to the backend work:** the `fcntl`/`SO_NBIO` wrap and the `getaddrinfo` shim (spike S2), `config.h` and flags for libsmb2/libnfs (`LIBSMB2_FLAGS`, `LIBNFS_FLAGS` are starting points).
 
@@ -50,6 +52,8 @@ Status 2026-10-17: draft PR [snes9xPS5#7](https://github.com/thatboialex/snes9xP
 
 - Block sizes, the 16 MiB whole-file limit, the 32 MiB budget and the 3 s head wait are starting values from the spec; Phase 4 measures them.
 - Covers on the console for games that appear after the first scan rely on `CoversRestartIfNeeded` (restart, then prefetch) or the background helper; only the host path (the shelf's own downloads) is tested.
+
+- MSU-1 packs (`<rom>.msu1`, a zip read by minizip) on a share are not prefetched and are cached as ordinary data, so a miss waits for the network and can pause the game. Loose `.msu`/`.pcm` files are the supported layout (README says so). Fixing it means reading the zip's directory and prefetching each entry's head, or refusing the pack in realtime; neither is in this PR.
 
 ## Next
 
