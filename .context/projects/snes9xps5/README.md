@@ -49,6 +49,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [decisions/001-network-rom-loading.md](./decisions/001-network-rom-loading.md) | You question why netfs is built the way it is. |
 | [box-art-lookup-plan.md](./box-art-lookup-plan.md) | You work on cover lookup for renamed or fan-translated ROMs: goal, design, acceptance. |
 | [decisions/002-box-art-name-matching.md](./decisions/002-box-art-name-matching.md) | You question why art names are matched by words and the ROM header. |
+| [decisions/003-network-shares-screen.md](./decisions/003-network-shares-screen.md) | You touch the Network shares screen, the keyboard or how `shares.txt` is edited. |
 
 ## Status
 
@@ -56,3 +57,4 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 |---|---|
 | 2026-10-17 | Network shares: plan written, no code. Next step is Phase 0 (spikes) in the plan. |
 | 2026-10-17 | Box art lookup for translated ROMs: implemented in a draft PR (words, extra CRC table, ROM header); host tests pass, console unverified. Covers for games libretro lacks now come from an embedded Hasheous/TheGamesDB table (step 7, 411 games), and `Front Mission - Gun Hazard` no longer gets `Front Mission`'s cover; a live per-ROM lookup stays open decision D4 and is not built. |
+| 2026-10-17 | Network shares screen (Settings > Network shares, with an on-screen keyboard, connection test, edit and remove) built on the netfs core; draft PR in snes9xPS5, unverified on console. |

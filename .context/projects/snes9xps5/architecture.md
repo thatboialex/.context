@@ -53,7 +53,7 @@ After step 8 the ROM is in RAM. Nothing reads the ROM file again during play.
 | CI | `.github/workflows/build.yml`: `host-tests` and `ps5-installer` (uploads the ELF as an artifact). |
 | Third-party code | Vendored: `ps5/third_party/zlib`, `ps5/frontend/third_party/mbedtls`, stb headers. Credits live in the root `README.md` ("License and credits"). |
 | Settings | `snes9x-ps5.ini` (`fe_settings.cpp`). Known keys only; rewritten atomically on save. |
-| Text input | None. There is no on-screen keyboard. |
+| Text input | `fe_osk.cpp` `EditText()`: a pad-driven on-screen keyboard (used by the Network shares screen). No system IME ([ADR 003](./decisions/003-network-shares-screen.md)). |
 
 ## Sockets today
 
