@@ -21,12 +21,12 @@ Run **Skyline** (code-injection framework) and **ARCropolis** (Smash Ultimate mo
 
 1. ProsperoEden does not include or download games, keys, firmware, mods, Skyline, ARCropolis or hashes. The player supplies them ([docs/MODS.md](https://github.com/thatboialex/ProsperoEden/blob/main/docs/MODS.md) already says so). Never commit or fetch Nintendo content or mod binaries. No piracy help in docs.
 2. Prefer the existing mods path (`roms/<Game>/mods/<mod>/{exefs,romfs}`, `headless/mods.h`) over new mechanisms. Add a mechanism only when `findings.md` shows the mods path cannot do it.
-3. Changes to Eden go in `tools/eden-patches/NN-name.diff`, small and numbered after the last one. Do not vendor Eden.
+3. Changes to Eden are either a numbered diff in `tools/eden-patches/NN-name.diff` (4 so far, applied by `tools/prepare-build.sh`) or a string replacement of an Eden source in `headless/CMakeLists.txt` (`eden_patch(...)`, `write_derived(...)`, which stops the configure when the pin changes). Use the one the neighbouring change uses; keep it small. Do not vendor Eden.
 4. No waits on the emulation, video or audio threads for new file or log work.
 5. Match the neighbouring file's style and licence header (`// SPDX-License-Identifier: GPL-3.0-or-later` in `headless/`). New user-facing behaviour gets a section in the matching `docs/*.md` and a `docs/CHANGELOG.md` line under the next version.
 6. Every code change passes `make test` on the host when the cloud session can run it; say plainly when it cannot.
 7. A cloud session cannot run the console. Label console behaviour **unverified** until Jason confirms it on hardware with [hardware-test-protocol.md](./hardware-test-protocol.md).
-8. Do not guess what Skyline or ARCropolis do. Phase 0 records what the sources show in `findings.md`; later phases cite it.
+8. Do not guess what Skyline or ARCropolis do. Phase 0 recorded what the sources show in `findings.md`; later phases cite it, and a finding that turns out wrong is corrected there.
 
 ## Terms (use exactly these)
 
@@ -50,10 +50,12 @@ Run **Skyline** (code-injection framework) and **ARCropolis** (Smash Ultimate mo
 | [hardware-test-protocol.md](./hardware-test-protocol.md) | You need Jason to test on the console, or write a test step. |
 | [phases/](./phases/) | One file per phase, `phase-N-name.md`. Read only yours. |
 | [decisions/001-user-supplied-skyline.md](./decisions/001-user-supplied-skyline.md) | You question why Skyline and ARCropolis are not bundled. |
-| `findings.md` (written by phase 0) | You need a verified fact about Eden, Skyline or ARCropolis. |
+| [findings.md](./findings.md) | You need a verified fact about Eden, Skyline or ARCropolis. |
+| [emulator-reference.md](./emulator-reference.md) | You want to see how Ryujinx and yuzu (via Eden) ran Skyline and ARCropolis. |
 
 ## Status
 
 | Date | State |
 |---|---|
 | 2026-10-17 | Plan and phase docs written (draft PR in `.context`). No code started. |
+| 2026-10-17 | Phase 0 done: `findings.md`. Smash 13.0.5 only; Eden already supports what Skyline needs; the SD card already exists; `make test` cannot run in the cloud container. |

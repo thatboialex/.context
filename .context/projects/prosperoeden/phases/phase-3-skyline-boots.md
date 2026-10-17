@@ -12,13 +12,14 @@ With Skyline installed as a ProsperoEden mod, Smash starts, Skyline initialises,
 
 ## Scope
 
-Close each Gap that findings assigns to this phase. Expected, in order of likelihood (confirm in findings):
+Findings 3 to 6 say Eden already has what Skyline calls, so this phase starts as **verification on the console** and writes code only for what the first logs show missing. In order:
 
-1. `main.npdm` replacement taken from the mod's exefs.
-2. `ro` service functions Skyline calls, and the SVCs for memory permission and code memory.
-3. JIT invalidation after the guest writes its code (inline hooks), including the interaction with Compile ahead and the block list: disable them for a game that has a code-changing mod, or invalidate correctly.
-4. Memory: Skyline's `main.npdm` asks for more; make sure `memory_layout` (4/6/8Gb) is honoured or raised.
-5. Sockets used for Skyline logging: must fail without hanging when the console has no route.
+1. `main.npdm` and `subsdk9` taken from the mod's exefs: check the log lines named in findings 3. If the mod's `main.npdm` is ignored, find out why before changing anything.
+2. `ro`, `MapProcessMemory`, own-process handle, `fsp-srv` SD: present at the pin; the log shows the first one that fails.
+3. JIT invalidation after inline hooks, with Compile ahead **off** first (the run with it on is in phase 7): Skyline's hooks must take effect. Findings 6 lists what to look at if they do not.
+4. Memory: Skyline's own cost; `memory_layout` is already per game (4/6/8Gb).
+5. Sockets: Skyline binds TCP port 6969 on any address (findings 4). It must fail without hanging when the console has no route. Decide with Jason whether to leave the port open, and tell phase 6.
+6. Load address: Skyline needs pages before the entry point (Eden's comment, findings 9). Fix the wrong comment in `headless/load_address.h` (seed 0 is `0x80000000`, not what ARCropolis checks for) when this phase touches the area.
 
 ## Out of scope
 

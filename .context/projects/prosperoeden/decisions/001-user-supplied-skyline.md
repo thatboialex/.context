@@ -1,6 +1,8 @@
 # ADR 001: Skyline and ARCropolis are user-supplied mods, not bundled
 
-Status: Proposed, 2026-10-17.
+## Status
+
+Accepted, 2026-10-17. Phase 0 found that the mods path carries Skyline (findings 3), so no new mechanism is needed.
 
 ## Context
 
