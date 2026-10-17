@@ -43,5 +43,5 @@ Everything on the console: the PS5 patches to libnfs (`__PROSPERO__`), `SO_ERROR
 
 - A server that sends fragmented RPC records does not work with libnfs 6.0.2 (see above); the read ends as a lost connection.
 - The export list (`mount_getexports_timeout`, 2 s) blocks and cannot be aborted. It runs only after a mount failed, when the share is unusable anyway.
-- A file handle open on a connection that died is leaked with the context (a few dozen bytes). Closing it would need the dead socket.
+- libnfs does not free open files in `nfs_destroy_context`. The backend tracks the handles it opens and frees them when a connection is dead or on `Disconnect()`: on NFSv3 a read-only handle closes locally with no I/O. On NFSv4 `CLOSE` is an RPC, so a handle open when the connection dies is still leaked with the context (a few dozen bytes).
 - NFSv4 mounts by path (no export list); `Enumerate()` returns `ENOTSUP`.
