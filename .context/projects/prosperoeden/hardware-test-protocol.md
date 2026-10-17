@@ -42,6 +42,8 @@ Run with the phase it names; each gets one line in that phase's Result.
 | 5 | A mod folder written in capitals and one in lower case | findings 5: case |
 | 5 | First start time with a large `ultimate/mods` (hundreds of files) | findings 5: listing and free space |
 | 5 | Offline start with `auto_update` on | findings 2 |
+| 2 | After a fresh start of the app, `/data/prosperoeden/user/sdmc` does not exist (if it did not before); after starting any game it does, and the log has `[ProsperoEden] sd card: sd:/ is ...` | phase 2: lazy creation |
+| 2 | `ultimate/mods` written once as `Ultimate/Mods`, once as `ultimate/mods` | findings 5: case; decides whether guest paths need folding |
 | 5 | `time` and `nifm` calls in the log do not fail | findings 4, unverified |
 | 7 | Resident memory with Skyline, then with ARCropolis and N mods | findings 8 |
 | 7 | Compile ahead on, hooks installed: no crash, no stale code | findings 6 |
