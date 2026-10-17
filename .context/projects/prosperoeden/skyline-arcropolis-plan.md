@@ -61,4 +61,5 @@ Update this table in the same change as the work.
 
 | Phase | State | PR / result |
 |---|---|---|
-| 0 to 8 | Not started | |
+| 0, 2 to 8 | Not started | |
+| 1 | Draft PR: protocol and `baseline.md` written, waiting for Jason's run | |

@@ -57,3 +57,4 @@ Run **Skyline** (code-injection framework) and **ARCropolis** (Smash Ultimate mo
 | Date | State |
 |---|---|
 | 2026-10-17 | Plan and phase docs written (draft PR in `.context`). No code started. |
+| 2026-10-17 | Phase 1: protocol and empty `baseline.md` written; waiting for Jason's console run. |
