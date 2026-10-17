@@ -36,6 +36,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | **Whole-file fetch** | Reading a complete file into memory when it is opened. |
 | **Read-ahead cache** | Block cache plus a worker thread that reads past the reader. Used for big files only. |
 | **Shelf** | The 3D game list (`fe_shelf.cpp`). Not "library" or "grid". |
+| **Tab** | One of the shelf's views: Internal, USB, Network (`fe_tabs.h`). Not "section" or "page". |
 
 ## Files
 
@@ -52,6 +53,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [box-art-lookup-plan.md](./box-art-lookup-plan.md) | You work on cover lookup for renamed or fan-translated ROMs: goal, design, acceptance. |
 | [decisions/002-box-art-name-matching.md](./decisions/002-box-art-name-matching.md) | You question why art names are matched by words and the ROM header. |
 | [decisions/003-network-shares-screen.md](./decisions/003-network-shares-screen.md) | You touch the Network shares screen, the keyboard or how `shares.txt` is edited. |
+| [decisions/004-shelf-tabs-network-tab.md](./decisions/004-shelf-tabs-network-tab.md) | You touch the shelf's tabs, the Network tab's states or its Square scan; what was and was not taken from PSFlycast. |
 | [cheats.md](./cheats.md) | You touch cheat loading, saving or the cheat menu: where `.cht` files are found, and how a changed file reaches the running game. |
 
 ## Status
@@ -63,4 +65,5 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | 2026-10-17 | Box art lookup for translated ROMs: implemented in a draft PR (words, extra CRC table, ROM header); host tests pass, console unverified. Covers for games libretro lacks now come from an embedded Hasheous/TheGamesDB table (step 7, 411 games), and `Front Mission - Gun Hazard` no longer gets `Front Mission`'s cover; a live per-ROM lookup stays open decision D4 and is not built. |
 | 2026-10-17 | Network shares screen (Settings > Network shares, with an on-screen keyboard, connection test, edit and remove) built on the netfs core; draft PR in snes9xPS5, unverified on console. |
 | 2026-10-17 | Network shares: the shared layer, cache, app wiring (CRC naming, late covers), NFS and SMB backends and the shares screen are on main (snes9xPS5 #7, #6, #8, #10), CI green. Nothing has run on a console yet; `.msu1` packs on a share are not prefetched. |
+| 2026-10-17 | Shelf tabs (Internal, USB, Network) and a PSFlycast-style Network tab: draft PR in snes9xPS5, host tests pass, unverified on console. Jason confirmed on the console that playing from a share works. |
 | 2026-10-17 | Cheats reload by themselves: a code added to the `.cht` file while a game runs (or with the cheat menu open) is applied without a restart. Draft PR in snes9xPS5, host-tested, console unverified. See [cheats.md](./cheats.md). |
