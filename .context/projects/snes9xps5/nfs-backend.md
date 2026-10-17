@@ -32,7 +32,7 @@ Real NFSv3 server (unfs3 0.11, `make -C ps5 test-nfs-server`, needs root, rpcbin
 
 ## Needs from the shared PS5 layer (not in this backend)
 
-- A working `getaddrinfo` (libnfs resolves the server with it) and an `fcntl` that makes sockets non-blocking. Both are the planned net shims; the console's own versions are unverified or refused (spec, "Wrapped calls").
+- A working `getaddrinfo` (libnfs resolves the server with it) and an `fcntl` that makes sockets non-blocking. Both are in `ps5/netfs/netfs_shims_ps5.cpp` on the core branch (`fcntl` O_NONBLOCK to `SO_NBIO`, `getaddrinfo` via libSceNet), now merged into the NFS branch. Whether they work on the console is unverified.
 - `nfs://host:port/...`: `port` is used as the NFS port when `nfsport` is not given.
 
 ## Unverified
