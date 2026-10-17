@@ -12,7 +12,7 @@ Status: code written, host-tested against Samba, **not run on a console**. Code:
 
 ## Decisions
 
-1. **libsmb2 6.2, vendored from the Debian `orig` tarball** (client sources only, no Kerberos, no CMake). `config.h` is ours. On the console `prospero-clang` defines `__FreeBSD__`, so libsmb2 takes its FreeBSD branch (`<sys/endian.h>`), not `PS4_PLATFORM`. Unverified; if the console build cannot find that header, switch to `-DPS4_PLATFORM`.
+1. **libsmb2 6.2, vendored from the Debian `orig` tarball** (client sources only, no Kerberos, no CMake). `config.h` is ours. On the console `prospero-clang` defines `__FreeBSD__`, so libsmb2 takes its FreeBSD branch (`<sys/endian.h>`), not `PS4_PLATFORM`. CI compiles and links it that way (PR snes9xPS5#8); how it behaves on a console is unverified.
 2. **Name lookup happens in the backend**, once: a dotted address is used as is, otherwise `getaddrinfo` (IPv4). libsmb2 is then given the dotted address, so it never resolves anything itself. On the console `getaddrinfo` is the core's `--wrap` shim (libSceNet), because the native one is broken (plan, Phase 0).
 3. **Non-blocking sockets** are libsmb2's own `fcntl(O_NONBLOCK)` call, which the core's `--wrap` shim turns into `SO_NBIO` on the console (`ps5/netfs/netfs_shims_ps5.cpp`). The backend has no console code of its own. The `SO_NBIO` value is unverified there.
 4. **Own wait loop, async API.** Every call polls in 100 ms slices, so `Abort()` (a flag) is seen within 100 ms and no socket is shut down from another thread (no fd-reuse race). A call fails after 4 s of silence. A dead connection is never reused; `Disconnect()` destroys it.
@@ -30,7 +30,7 @@ IPv4 only. IP addresses and DNS names only (no NetBIOS or mDNS names). SMB 2/3 o
 
 ## Console checklist (Jason, SMB only; the generic list is in the spec)
 
-1. The build links (libsmb2 against the SDK libc; the `ps5-installer` CI job is the only compile check).
+1. The app starts with the SMB backend linked in (CI already builds the ELF; this is the first run).
 2. `shares.txt` with an IP address: connect, list, launch a ROM.
 3. The same with a DNS name (`nas`, `nas.lan`): the resolver path.
 4. Guest, then a user with a password containing `@ & = %`.
