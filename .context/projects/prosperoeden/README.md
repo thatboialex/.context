@@ -59,4 +59,5 @@ Run **Skyline** (code-injection framework) and **ARCropolis** (Smash Ultimate mo
 |---|---|
 | 2026-10-17 | Plan and phase docs written (draft PR in `.context`). No code started. |
 | 2026-10-17 | Phase 0 done: `findings.md`. Smash 13.0.5 only; Eden already supports what Skyline needs; the SD card already exists; `make test` cannot run in the cloud container. |
+| 2026-10-17 | Phase 4 draft PR: the Library and home screen show `Skyline, 12 ARC mods` or `Skyline off` ([ProsperoEden #7](https://github.com/thatboialex/ProsperoEden/pull/7), stacked on #6). |
 | 2026-10-17 | Phase 2 draft PR: SD card folder kept at `user/sdmc`, documented, made when a game starts ([ProsperoEden #6](https://github.com/thatboialex/ProsperoEden/pull/6)). |
