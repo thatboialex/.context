@@ -46,9 +46,11 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [network-shares-plan.md](./network-shares-plan.md) | You work on SMB/NFS loading: goal, design, phases, open decisions. |
 | [network-shares-spec.md](./network-shares-spec.md) | You write the code: address format, per-file changes, tests, risks. |
 | [decisions/001-network-rom-loading.md](./decisions/001-network-rom-loading.md) | You question why netfs is built the way it is. |
+| [decisions/003-network-shares-screen.md](./decisions/003-network-shares-screen.md) | You touch the Network shares screen, the keyboard or how `shares.txt` is edited. |
 
 ## Status
 
 | Date | State |
 |---|---|
 | 2026-10-17 | Network shares: plan written, no code. Next step is Phase 0 (spikes) in the plan. |
+| 2026-10-17 | Network shares screen (Settings > Network shares, with an on-screen keyboard, connection test, edit and remove) built on the netfs core; draft PR in snes9xPS5, unverified on console. |
