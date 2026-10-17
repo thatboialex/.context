@@ -27,3 +27,21 @@ Filled in by each phase.
 | 5 | Add ARCropolis and one custom-character ARC mod | Character is selectable and playable |
 | 7 | Same, with the performance settings the phase changes | Frame rate and load time compared with `baseline.md` |
 | 8 | Fresh setup by following only the guide | Same result as phase 5, no extra steps |
+
+### Questions only the console can settle (from `findings.md`)
+
+Run with the phase it names; each gets one line in that phase's Result.
+
+| Phase | Check | Why |
+|---|---|---|
+| 1 | The game's version string on screen or in the log (must be 13.0.5) | findings 1: GetDisplayVersion comes from the update's NACP |
+| 3 | Log shows "ExeFS: LayeredExeFS patches applied successfully" and the mod's `main.npdm` in `metadata.Print()` | findings 3 |
+| 3 | Skyline's first log line in the ProsperoEden log (`Debug_Emulated`); a hook has an effect | findings 4, 6 |
+| 3 | Console with no network route: Skyline still starts, no hang | findings 4: log port 6969 |
+| 5 | `ninput::init()` outcome: ARCropolis starts, pads work | findings 9 |
+| 5 | A mod folder written in capitals and one in lower case | findings 5: case |
+| 5 | First start time with a large `ultimate/mods` (hundreds of files) | findings 5: listing and free space |
+| 5 | Offline start with `auto_update` on | findings 2 |
+| 5 | `time` and `nifm` calls in the log do not fail | findings 4, unverified |
+| 7 | Resident memory with Skyline, then with ARCropolis and N mods | findings 8 |
+| 7 | Compile ahead on, hooks installed: no crash, no stale code | findings 6 |

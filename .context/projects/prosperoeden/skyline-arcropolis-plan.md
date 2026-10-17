@@ -1,6 +1,6 @@
 # Plan: Skyline and ARCropolis on ProsperoEden
 
-Status: Proposed, 2026-10-17. Requested by Jason. Code: none yet. How threads run it: [agent-workflow.md](./agent-workflow.md).
+Status: Proposed, 2026-10-17; phase 0 findings in, 2026-10-17. Requested by Jason. Code: none yet. How threads run it: [agent-workflow.md](./agent-workflow.md).
 
 ## Goal
 
@@ -8,16 +8,17 @@ Start Super Smash Bros. Ultimate from ProsperoEden with Skyline and ARCropolis l
 
 Non-goals: online play with mods, bundling or downloading Skyline/ARCropolis/mods ([ADR 001](./decisions/001-user-supplied-skyline.md)), other Skyline games (kept possible, not tested), HDR/other big mod packs beyond a custom-character smoke test.
 
-## Background (from memory, every item is checked in phase 0)
+## Background (checked in phase 0, see [findings.md](./findings.md))
 
-Mark these **unverified** until `findings.md` confirms them.
+Citations and the remaining unverified points are in `findings.md`; the answers here are the short form.
 
-1. Skyline is installed to a game as `exefs/subsdk9` and a replaced `exefs/main.npdm` (more kernel capabilities and services). Plugins are `.nro` files in `romfs/skyline/plugins/`.
-2. ARCropolis (`libarcropolis.nro`) reads the SD card: ARC mods in `sd:/ultimate/mods/<name>/`, its config in `sd:/ultimate/arcropolis/`, and a hashes file it needs to map file names. It also hooks the game's file loading.
-3. Smash needs its update at a version ARCropolis supports (13.0.x). The update goes beside the game in `roms/<Game>/`.
-4. Skyline patches game code at run time (inline hooks), loads NROs with the console's `ro` service and may use sockets for logs. The emulator must run those: exefs layering of `main.npdm`, `ro` service, SD card file system, memory permission calls and code-cache invalidation after a write.
-5. ProsperoEden recognises `main`, `main.npdm`, `subsdk0..9` in a mod's `exefs/` (`headless/mods.h` `Kinds`). So step 1 may already load. What it lacks (to check): an SD card folder, setup guidance, status in the launcher, Skyline-specific diagnostics, memory defaults for a heavily modded Smash.
-6. **Compile ahead** (block list) and the shader/JIT caches may assume game code does not change. A hooked game changes it. Phase 3 and 7 test this.
+1. Skyline is installed to a game as `exefs/subsdk9` and a replaced `exefs/main.npdm` (Smash's, with every SVC and service allowed). Plugins are `.nro` files in `romfs/skyline/plugins/`. Confirmed (findings 2).
+2. ARCropolis (`libarcropolis.nro`) reads the SD card: ARC mods in `sd:/ultimate/mods/<name>/`, its config per user under `sd:/ultimate/arcropolis/config/`, and it hooks the game's file loading. The hashes file is **optional** (log lines only), not required (findings 2).
+3. Smash must be at exactly **13.0.5**, the only version ARCropolis 4.1.1 runs on (findings 1). The update goes beside the game in `roms/<Game>/`.
+4. Skyline patches game code at run time (inline hooks), loads NROs with the `ro` service and opens a TCP log port. Eden at the pin has all of it: `main.npdm` layering, `ro`, SD card, `MapProcessMemory`, own-process handle, code-cache invalidation (findings 3 to 6). Only the console can show that it works on the PS5.
+5. ProsperoEden recognises `main`, `main.npdm`, `subsdk0..9` in a mod's `exefs/` (`headless/mods.h` `Kinds`), and Eden layers them: the install should already load (findings 3). The SD card also exists already, at `/data/prosperoeden/user/sdmc`, undocumented (findings 5). What it lacks: documentation of the SD card, setup guidance, status in the launcher, Skyline-specific diagnostics, memory defaults for a heavily modded Smash.
+6. **Compile ahead** and the JIT caches: the JIT invalidates on `ic ivau` across all cores and Compile ahead drops stale blocks by design (findings 6). Phase 3 and 7 test this on the console.
+7. **New:** ARCropolis tells an emulator from a console by the main module's address (`0x8004000` or `0x8504000`); Eden and ProsperoEden load at `0x80000000`+, so it takes the console branch and runs `ninput::init()` (findings 9). Phase 5 finds out if that matters.
 
 ## Phases
 
@@ -51,9 +52,9 @@ Phases 1, 3, 5, 7 and 8 end with a console run (protocol: [hardware-test-protoco
 
 | # | Question | Recommended |
 |---|---|---|
-| D1 | SD card folder location | `<game files folder>/sd` so it travels with the games on USB/M.2; setting to override. Phase 2 confirms. |
+| D1 | SD card folder location | The SD card exists: `/data/prosperoeden/user/sdmc` (Eden's own). Recommended: keep it, document it, create it only when a game opens it. A setting to move it to `<game files folder>/sd` (travels with the games on USB/M.2) is optional. Phase 2 asks Jason. |
 | D2 | One SD card per console or per profile | Per console. ARC mods are big; profiles share them. |
-| D3 | Which Smash version to target | The newest version ARCropolis supports, found in phase 0. |
+| D3 | Which Smash version to target | **Answered by phase 0: 13.0.5**, the only version ARCropolis 4.1.1 supports. |
 
 ## Status
 
@@ -61,4 +62,5 @@ Update this table in the same change as the work.
 
 | Phase | State | PR / result |
 |---|---|---|
-| 0 to 8 | Not started | |
+| 0 | Draft PR (findings written) | [findings.md](./findings.md) |
+| 1 to 8 | Not started | |

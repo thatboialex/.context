@@ -8,12 +8,12 @@ With ARCropolis as a Skyline plugin and one custom-character ARC mod on the SD c
 
 ## Read first
 
-`findings.md` (ARCropolis files, hashes, SD card needs), `skyline-requirements.md`, `baseline.md`, the SD card section of `docs/INSTALL.md`.
+`findings.md` (questions 1, 2, 5, 9), `skyline-requirements.md`, `baseline.md`, the SD card section of `docs/INSTALL.md`.
 
 ## Scope
 
-- Exact install layout for ARCropolis and the hashes file; write it into the protocol run so Jason can repeat it.
-- Whatever ARCropolis needs that Skyline alone did not: file hooks on Smash's resource loading, large and many-small-file reads from the SD card folder, directory listing speed, path forms (`rom:/`, `sd:/`), case handling, network use when offline (its hash download and update check must fail fast).
+- Exact install layout for ARCropolis (findings 2: the hashes file is optional, not needed); write it into the protocol run so Jason can repeat it. Smash must report **13.0.5**; the version test below is ARCropolis's own dialog.
+- Whatever ARCropolis needs that Skyline alone did not: file hooks on Smash's resource loading, large and many-small-file reads from the SD card folder, directory listing speed, path forms (`rom:/`, `sd:/`), case handling, network use when offline (its update check must fail fast; `auto_update` defaults to on, findings 2), and the `ninput::init()` branch ARCropolis takes because the load address is not one it knows (findings 9): if it hangs or crashes, that is the first thing to fix, and the options are listed there.
 - Fix Gaps in Eden patches or `headless/`; same rules as phase 3.
 
 ## Out of scope

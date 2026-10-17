@@ -46,4 +46,9 @@ No code. Reviewer (Sonnet, fresh thread) spot-checks five claims against the sou
 Question 6 if the cache invalidation path is unclear after one read of Eden's `arm_dynarmic_64.cpp` and ProsperoEden's JIT files.
 
 ## Result
-State: Not started
+State: Draft PR
+PR: https://github.com/thatboialex/.context/pull/16 (phase 0 is on this branch, not merged)
+Changed: `findings.md` (new); `skyline-arcropolis-plan.md` (Background, D1, D3, status); `README.md` (rules 3 and 8, files, status); `hardware-test-protocol.md` (console checks); `decisions/001-user-supplied-skyline.md` (Accepted); phase files 1, 2, 3, 5, 6, 7, 8 (scope).
+Review: a fresh Sonnet thread checked five claims against the source (ARCropolis 13.0.5 check, emulator address check and Eden/Ryujinx load addresses, ExeFS re-read and `override_update`, JIT invalidation across cores, SD card path and free-space walk): all confirmed; one line range corrected.
+Unverified: everything about behaviour on the console. Not read: yuzu's own source (no reachable repository), ARCropolis's release assets and wiki, how ProsperoEden's loader picks the update's NACP, `time`, `nifm` and `hid` behaviour.
+Notes for the next session: Smash must be 13.0.5. Eden already has the SVCs, `ro`, SD card and ExeFS layering Skyline needs. `make test` cannot run in the cloud container (dependency downloads blocked). Phase 3 starts as verification, not as code. The load address is the one place ARCropolis will notice it is not on a console (findings 9).

@@ -8,7 +8,7 @@ A modded Smash is no worse than a reasonable fraction of the vanilla baseline, a
 
 ## Read first
 
-`baseline.md`, `findings.md` (question 8), `docs/SETTINGS.md` (Performance, Memory, Speed limit), `docs/MODS.md` (memory paragraph), `tools/analyze-perf-log.py`, `headless/performance.cpp`, `headless/cache_budget.h`.
+`baseline.md`, `findings.md` (questions 6 and 8: memory sizes are not known from source, Compile ahead is safe by design only), `docs/SETTINGS.md` (Performance, Memory, Speed limit), `docs/MODS.md` (memory paragraph), `tools/analyze-perf-log.py`, `headless/performance.cpp`, `headless/cache_budget.h`.
 
 ## Scope
 

@@ -4,7 +4,7 @@
 
 ## Goal
 
-The game sees an SD card (`sd:/`) whose contents are a folder the player controls and can fill over FTP, so ARCropolis finds `sd:/ultimate/mods/`. Skyline games on other emulators expect exactly this.
+The game sees an SD card (`sd:/`) whose contents are a folder the player controls and can fill over FTP, so ARCropolis finds `sd:/ultimate/mods/`. **Phase 0 found that Eden already mounts one at `/data/prosperoeden/user/sdmc`** (findings 5), so this phase is mostly decision, documentation and edge cases, not a new mount.
 
 ## Read first
 
@@ -12,11 +12,12 @@ The game sees an SD card (`sd:/`) whose contents are a folder the player control
 
 ## Scope
 
-- Decide D1 (see the plan): default location and the setting to change it. Recommended: `<game files folder>/sd`, created on first need, never behind the player's back (`mods.h` has the rule).
-- Point Eden's SD card file system at it. Prefer a small `tools/eden-patches/NN-*.diff` or an existing config path over new code; findings says which exists.
-- Case-insensitive path matching if ARCropolis needs it and Eden's host file system does not give it (`mods.h` already does this for title folders).
+- Decide D1 (see the plan): keep `user/sdmc` (recommended) or move it with a setting to `<game files folder>/sd`. Ask Jason once. Whether Eden's path manager creating the folder at start breaks the rule that nothing is created behind the player's back (`mods.h`) is part of the decision.
+- Only if D1 moves it: point Eden's SD card file system at the new place with the mechanism its neighbours use (README rule 3).
+- Case: the host is case-sensitive, a Switch SD card is not. Decide from the protocol's case run whether guest paths under `sd:/` need folding (`mods.h` already does this for title folders); do not build it before the run shows a need.
+- `SDMCFactory::GetSDMCFreeSpace` walks the whole SD folder (`eden:sdmc_factory.cpp:57-59`). Find out whether anything Skyline or ARCropolis does calls it; if so, cache or cap it.
 - A host check (`headless/*_check.cpp` pattern) for the path logic.
-- `docs/INSTALL.md`: the folder in the layout diagram, and what it is for. Plain words: "SD card folder".
+- `docs/INSTALL.md`: the folder in the layout diagram (it is missing today), and what it is for. Plain words: "SD card folder". Mention that `atmosphere/contents/<title ID>/` inside it works like a mod.
 
 ## Out of scope
 
