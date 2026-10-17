@@ -47,7 +47,7 @@ Waves are the parallel groups: the coordinator starts every phase of a wave as i
 
 Phases 1, 3, 5, 7 and 8 end with a console run (protocol: [hardware-test-protocol.md](./hardware-test-protocol.md)). A phase's code can be merged as **unverified** before the run; the phase is **closed** only after Jason posts the run result. Wave N+1 may start on unverified code only when its phase file says so.
 
-## Open decisions (ask Jason, recommended answer first)
+## Decisions (Jason approved the recommended answers on 2026-10-17; phase 0 or 2 may refine D1)
 
 | # | Question | Recommended |
 |---|---|---|
