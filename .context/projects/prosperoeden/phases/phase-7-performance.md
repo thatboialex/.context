@@ -8,11 +8,11 @@ A modded Smash is no worse than a reasonable fraction of the vanilla baseline, a
 
 ## Read first
 
-`baseline.md`, `findings.md` (question 8), `docs/SETTINGS.md` (Performance, Memory, Speed limit), `docs/MODS.md` (memory paragraph), `tools/analyze-perf-log.py`, `headless/performance.cpp`, `headless/cache_budget.h`.
+`baseline.md`, `hardware-test-protocol.md` (Measuring), `findings.md` (question 8), `docs/SETTINGS.md` (Performance, Memory, Speed limit), `docs/MODS.md` (memory paragraph), `tools/analyze-perf-log.py`, `headless/performance.cpp`, `headless/cache_budget.h`.
 
 ## Scope
 
-- Measure (protocol, phase 7 run): vanilla, Skyline only, Skyline + ARCropolis with N small ARC mods, with many. Load time, frame rate, memory.
+- Measure (protocol, "Measuring"; phase 1 took no numbers, so vanilla is measured here too, optional): vanilla, Skyline only, Skyline + ARCropolis with N small ARC mods, with many. Load time, frame rate, memory.
 - Decide and implement, only if the measurements justify it: a recommended memory layout note, a default for games with Skyline (the mods already ask for a game-specific `memory_layout`), Compile ahead interaction (turned off or made safe for hooked code), SD card read path (the existing fast file read patch `01-fast-file-reads.diff` may already cover it), directory listing cost.
 - Record the measurements in `baseline.md` so the guide can quote real numbers.
 
