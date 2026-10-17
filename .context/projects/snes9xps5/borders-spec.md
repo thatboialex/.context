@@ -14,7 +14,7 @@ For the thread that writes the code. The why is in [borders-plan.md](./borders-p
 
 ## Seams (Thread A lands these first; B and C code against them)
 
-Behaviour after the seam change is identical to `main`: no border is ever set.
+Behaviour after the seam change is identical to `main`: no border is ever set. The seam commit is the one exception to the ownership table in the plan: A alone creates the stub `fe_border.h/.cpp`, their Makefile line and the placeholder `default.png` in it. Once it is on `main`, those files belong to B and C as the table says, and A touches none of them again.
 
 `ps5/coreorbis/orbis-shims/ProsperoVideo.h` (A), inside `namespace ps5video`, after `Rect`:
 
@@ -68,13 +68,13 @@ void Release();
     <name>.ini         optional, same stem
 ```
 
-**PNG.** Exactly 1920x1080, 8 bits per channel: RGBA, RGB, or palette with `tRNS` (The Bezel Project's files are palette). Straight (not premultiplied) alpha. Under 8 MiB. Anything else is refused with `[border] <file>: <reason>` and the next choice applies.
+**PNG.** Exactly 1920x1080, 8 bits per channel: RGBA, palette with `tRNS` (The Bezel Project's files are palette), or RGB. An RGB image is opaque everywhere, so it is accepted only with a `window=` in its `.ini` (otherwise "no clear centre"). Straight (not premultiplied) alpha. Under 8 MiB. Anything else is refused with `[border] <file>: <reason>` and the next choice applies.
 
 **`.ini`.** `key=value` lines like `snes9x-ps5.ini`; unknown keys and `#` lines are ignored; a bad value is ignored with a log line.
 
 | Key | Value | Meaning |
 |---|---|---|
-| `window` | `x,y,w,h` in surface pixels | Use this rectangle as the window instead of finding it. Must lie inside 1920x1080 and be at least 320x180. |
+| `window` | `x,y,w,h` in surface pixels | Use this rectangle as the window instead of finding it. Must lie inside 1920x1080 and be at least 480x270. The override punches the window out: every pixel of the image inside the rectangle is treated as alpha 0, so the rim is empty (an image's soft glass edge is lost when the window is overridden). |
 | `off` | `1` | This game has no border even when Border is Auto. |
 
 **Drop-in.** The Bezel Project's `retroarch/overlay/GameBezels/SNES/*.png` copied to `games/` works as is. Its `.cfg` files are not read.
@@ -88,7 +88,7 @@ void Release();
 
 ## Building the border (B)
 
-From the RGBA image and the window: `backdrop[i]` is the pixel composited on opaque black (`c * a / 255`, alpha forced to 255), so the clear window is black and the rim pixels sit on black: that is what shows in the window outside the picture rectangle (for example when the picture is narrower than the window). `rim` holds every pixel inside the window with alpha 1 to 255 (255 included: an opaque rounded corner must be redrawn over the picture too). `pre` is each colour times alpha, divided by 255 and rounded; `inv` is 255 minus alpha. Allocation failure: log, return null (no border).
+From the RGBA image and the window: `backdrop[i]` is the pixel composited on opaque black (`c * a / 255`, alpha forced to 255), so the clear window is black and the rim pixels sit on black: that is what shows in the window outside the picture rectangle (for example when the picture is narrower than the window). `rim` holds every pixel inside the window with alpha 1 to 255 (after a `window=` override has cleared the rectangle, so an overridden window has none) (255 included: an opaque rounded corner must be redrawn over the picture too). `pre` is each colour times alpha, divided by 255 and rounded; `inv` is 255 minus alpha. Allocation failure: log, return null (no border).
 
 ## Choosing the border (B)
 
@@ -112,13 +112,13 @@ All in `ProsperoVideo.cpp`. `DrawSnes` keeps its signature; it reads the border 
 
 1. **Bounds.** `ComputeRect(src_w, src_h, aspect, bounds)` where `bounds` is the whole surface with no border, else `border.window`. Inside `bounds`, centred, width kept even:
    - 4:3 and 8:7 (the ratio is `base_w / lines` for pixel perfect, as today): fit by the limiting side; if `bounds` has the same ratio within 3%, fill `bounds` instead.
-   - Integer: `k = max(1, min(bounds.w / base_w, bounds.h / lines))`.
+   - Integer: `k = min(bounds.w / base_w, bounds.h / lines)`. If `k < 1` (a window smaller than the source; the 480x270 minimum keeps this from happening for 256x239 and smaller) use the 4:3 rule instead. The result always lies inside `bounds`: clamp, never centre an oversized rectangle (a negative origin would write outside the surface).
    - Stretch: fill `bounds`.
    With the whole surface as bounds every result equals today's (1440x1080, 8:7 at full height, integer, 1920x1080); a host test pins this.
 2. **Clear.** Today any change of source size, aspect, scanlines or shader fills the whole surface black and reports the full surface as changed. With a border: restore the backdrop (`memcpy` of 8.3 MB into the surface) and report the full surface only when the picture rectangle changed, the border changed, or `InvalidateSnes()` ran. A change of source size that leaves the rectangle alone rebuilds the lookup tables and nothing else. Without a border keep today's behaviour exactly.
 3. **Rim.** After the picture (plain path or `ps5crt::Render`), blend each rim pixel that lies inside the picture rectangle: per colour channel `out = (pic * inv + 127) / 255 + pre` (within 1 of exact). The `Present` rectangle stays the picture rectangle. Pixels of the rim outside the picture rectangle are already in the backdrop.
 4. **Log.** Add the border to the existing "picture ..." log line only when one is active (window and picture rectangle).
-5. **Threading.** `SetBorder` and `DrawSnes` run on the main loop's thread today; hold the border in a `shared_ptr` and read it once per call so that stays safe if that changes.
+5. **Threading.** `SetBorder` and `DrawSnes` run on the main loop's thread today; keep the border in a `std::shared_ptr` that `SetBorder` publishes with `std::atomic_store` and `DrawSnes` reads once per call with `std::atomic_load` (the C++17 free functions), so a change of threading cannot race.
 
 ## Settings row (C)
 
@@ -132,8 +132,8 @@ A `Border` row in `SettingsMenu` after `Aspect ratio` (enum entry `S_BORDER`, la
 
 | Test | Thread | Asserts |
 |---|---|---|
-| `tests/test_border_render.cpp` | A | `ComputeRect` equals today's numbers for the four aspects; the 3% fill rule; a border sets the picture rectangle inside the window; the `Present` rectangle for a normal frame is the picture rectangle; a source-size change that keeps the rectangle does not restore the backdrop; rim blend matches the formula; no border leaves the surface as it was. |
-| `tests/test_border_pack.cpp` | B | Window found on a generated RGBA, RGB and palette+`tRNS` PNG; refused: wrong size, opaque centre, tiny window; `window=` override; lookup order (own file name, matcher, `default.png`, built-in); `off=1`; a corrupt PNG falls through; rim and backdrop values at known pixels. |
+| `tests/test_border_render.cpp` | A | `ComputeRect` equals today's numbers for the four aspects, and with a 480x270 window every aspect stays inside it; the 3% fill rule; a border sets the picture rectangle inside the window; the `Present` rectangle for a normal frame is the picture rectangle; a source-size change that keeps the rectangle does not restore the backdrop; rim blend matches the formula; no border leaves the surface as it was. |
+| `tests/test_border_pack.cpp` | B | Window found on a generated RGBA, RGB and palette+`tRNS` PNG; refused: wrong size, opaque centre (an RGB image without `window=`), window under 480x270; an RGB image with `window=` leaves the game visible (empty rim); `window=` override; lookup order (own file name, matcher, `default.png`, built-in); `off=1`; a corrupt PNG falls through; rim and backdrop values at known pixels. |
 | host render group in `tests/run-tests.sh` | C | With a generated border and `border=1` in the ini, `check_ppm.py` finds the border colour outside the window, the game colour inside it, and (pause menu) both darkened. Border Off: the picture rectangle and colours equal the existing groups'. |
 
 ## Left unverified until Jason uses it on the console
