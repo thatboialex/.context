@@ -29,7 +29,7 @@ Review: read the protocol as Jason would; every step must be a thing he can do f
 
 ## Result
 State: Draft PR
-PR: see the `.context` draft PR for branch `claude/project-thread-g9eikk`
+PR: https://github.com/thatboialex/.context/pull/17
 Changed: `hardware-test-protocol.md` (Setup, Every run, Reading the logs, phase 1 run); `baseline.md` (new, empty results table, every row "waiting for Jason"); this file; the plan's and README's status.
 Unverified: everything about the console. Steps 1 and 2 are done from source and docs only; step 3 (the run) and step 4 are Jason's.
 Notes for the next session: The frame-rate line (`EDEN_VULKAN_FRAME fps= worst_ms=`, every 5 s) is in `heap.log` of release builds, but `tools/analyze-perf-log.py` needs `EDEN_DEV_*` lines that only `make dev` prints, so it prints nothing useful for a release baseline; the protocol has an awk one-liner instead. Load times are not logged, so they are Jason's stopwatch. Logs rotate to `.prev.log` the next time ProsperoEden opens: copy them before reopening. Fill `baseline.md` from Jason's ZIP, then set State to Closed (console-verified).
