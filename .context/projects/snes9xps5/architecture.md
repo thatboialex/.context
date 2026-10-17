@@ -20,7 +20,7 @@ The app runs sandboxed until the helper (`Snes9xPS5-helper.elf`, port 9089) lets
 |---|---|---|
 | 1. Roots | `ps5/coreorbis/orbis-shims/orbis_paths.cpp:100` `OrbisRomRoots()` | `/data/snes9x/roms`, `/mnt/usb0-7/snes9x/roms`, `/mnt/ext0-1/snes9x/roms`. Existing folders only, probed with `stat`. |
 | 2. Scan | `ps5/frontend/fe_games.cpp:406` `ScanGames()` | `Walk()` (line 237) lists up to 4 folder levels with `opendir`/`readdir` plus one `stat` per entry. Extensions: `.sfc .smc .swc .fig .bs .st .zip .gz .bin .mgd`. |
-| 3. Name | `fe_games.cpp:419-441` | Chain: exact No-Intro file name, then CRC32, then loose name, then fuzzy name. |
+| 3. Name | `fe_games.cpp:419-441` | Chain: exact No-Intro file name, then CRC32, then loose name, then fuzzy name. A CRC found in `data/snes-extra-crc.tsv` (fan translations) sets `crc_name`, and a ROM no table names gets its header title (`fe_romheader.h`); both feed only the art lookup (`fe_covers.cpp` `MatchArtName`, `fe_artmatch.h`). See [box-art-lookup-plan.md](./box-art-lookup-plan.md). |
 | 4. CRC | `fe_games.cpp:340` `RomCrc32()` | Reads the whole ROM (zip: reads the stored CRC from the directory). Cached in `/data/snes9x/covers/crc-cache.txt` by path, size and mtime (`CachedCrc`, line 206). |
 | 5. Shelf | `ps5/frontend/fe_shelf.cpp:630` | Calls `ScanGames` on the UI thread with a progress callback. USB badge from `GameInfo::on_usb` (`fe_shelf.cpp:884`). |
 | 6. Browser | `ps5/frontend/fe_menu.cpp:484-545` | Folder list screen. Calls `OrbisRomRoots()` again every 3 s while on the root list. |

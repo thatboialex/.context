@@ -54,4 +54,4 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | Date | State |
 |---|---|
 | 2026-10-17 | Network shares: plan written, no code. Next step is Phase 0 (spikes) in the plan. |
-| 2026-10-17 | Box art lookup for translated ROMs: plan and ADR 002 written; implementation in progress. |
+| 2026-10-17 | Box art lookup for translated ROMs: implemented in a draft PR (words, extra CRC table, ROM header); host tests pass, console unverified. Live online lookup is open decision D4. |
