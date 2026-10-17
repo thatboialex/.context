@@ -37,7 +37,7 @@ Real NFSv3 server (unfs3 0.11, `make -C ps5 test-nfs-server`, needs root, rpcbin
 
 ## Unverified
 
-Everything on the console: the PS5 patches to libnfs (`__PROSPERO__`), `SO_ERROR` and `SO_NOSIGPIPE` on console sockets, throughput, behaviour on Wi-Fi.
+Everything on the console: the PS5 patches to libnfs (`__PROSPERO__`), `SO_ERROR` and `SO_NOSIGPIPE` on console sockets, throughput, behaviour on Wi-Fi. What is checked: `make -C ps5 ps5` with the payload SDK compiles and links (all libnfs sources and `backend_nfs.cpp`, `-Werror` for the backend); the libnfs objects need only libc and libc++ symbols beyond their own.
 
 ## Known limits
 
