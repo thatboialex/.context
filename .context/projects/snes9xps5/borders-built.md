@@ -29,7 +29,7 @@ Jason: the border "only works in 4:3". Cause: the window was whatever the art dr
 | 4:3 | as drawn when within 3% of 4:3 (the same snap as the renderer's `FitRatio`); else the height is kept and the width follows |
 | 8:7 (pixel perfect) | height kept, width = height x 8/7 (1186 for the 1398x1038 art); the side margins stretch wider |
 | Stretch 16:9 | the side margins may shrink to 40% (`kMinMarginPct`), which caps the width (1712 for 1398x1038); the height follows the shape (963); top and bottom margins stretch taller |
-| Integer scale | the window is cut to the whole-multiple picture, 4x = 1024x896 (snes9xPS5#22, see below); #20 first left it as drawn, with black around the picture |
+| Integer scale | the window is cut to the whole-multiple picture, 4x = 1024x896 (snes9xPS5#22, see below); #20 first left it as drawn, with black around the picture. Side art is scaled evenly, not stretched, since #23 |
 
 - The margins keep their drawn proportions (left : right, top : bottom), so an off-centre frame stays off-centre. A window that touches the surface edge (no margin) is centred when it narrows.
 - The art is cut in five pieces per axis: margin, 64 px of window corner, window middle, corner, margin. Only margins and the middle stretch; the corners (rounded glass, soft edge, opaque corner pixels) are copied 1:1 and nothing is blended across a cut. Bilinear, colours weighted by alpha, fast path for opaque pixels. About 40 ms on the host at -O2 for half-transparent art (typical art is mostly opaque); it runs where the border is picked (a settings change, a game start, a download landing), never on the emulation thread.
@@ -42,12 +42,23 @@ Jason: the border "only works in 4:3". Cause: the window was whatever the art dr
 
 Jason (photo, Super Robot Wars, Japan border): the game sat in the middle of the opening with black bands. Cause: the picture was 73% of the window's width, exactly 4x (1024x896) in the 1398x1038 window; #20 deliberately left Integer alone (`OpeningRatio` false), so only 4:3, 8:7 and Stretch fitted.
 
-**Default picked: Integer cuts the window to the whole multiple itself** (`IntegerOpening` in `fe_borderimg.*`): the largest k with 256k x 224k inside the drawn window (4 for any window of at least 1024x896), margins keep their proportions as in #20, so 1398x1038 at 261,21 becomes 1024x896 at 448,92. The art around it is stretched to fit (top and bottom about 4.4x taller, sides 1.7x wider for the Bezel Project's usual art); it looks like the 8:7 refit, only more so. The picture is smaller than at 4:3 (1024x896 against 1398x1038), which is what Integer scale means.
+**Default picked: Integer cuts the window to the whole multiple itself** (`IntegerOpening` in `fe_borderimg.*`): the largest k with 256k x 224k inside the drawn window (4 for any window of at least 1024x896), margins keep their proportions as in #20, so 1398x1038 at 261,21 becomes 1024x896 at 448,92. #22 stretched the art around it to fit (top and bottom about 4.4x taller, sides 1.7x wider for the Bezel Project's usual art), which squashed the box art: #23 fixes that (next section). The picture is smaller than at 4:3 (1024x896 against 1398x1038), which is what Integer scale means.
 
 - A 239-line (PAL) picture has no whole multiple in a 1024x896 window (4x is 956 high). `ComputeRect` takes a window that is itself a whole multiple of 256x224 and a picture of another height as "fill it like 8:7": 960x896 with 32 px bars each side, not 3x with black all round. On the bare screen, Integer is still the whole multiple (1024x956).
 - `Aspect::Count` is now the "art as drawn" value (tests; `Choose` default). The settings screen never gives it.
 - Tests: `make -C ps5 test-border` (TestFit: `IntegerOpening`, art, TestAspect), `test-border-render` (`ComputeRect` in a 4x window, 239 lines), run-tests group 34 (the logged windows are the fitted ones now) and 35 f (aspect=2: 448,92 to 1472,988, the picture fills it). Group 35 has no 239-line case: the test ROM draws 224 lines.
 - Open: unverified on a TV. If the stretch looks bad, the alternative is to treat Integer as 8:7 when a border is on (non-integer picture filling the window).
+
+## Side art is scaled evenly, not stretched (snes9xPS5#23, 2026-10-17)
+
+Jason, on the Integer build (#22): the stretched frame art "looks not good". Mockups with his Dai-4-ji Super Robot Taisen border (project files `snes9xps5-mockups/`): A the stretch, B the picture filling the art's own opening (no 4x), C side art not stretched, D the panel edge carried across the gap (smeared, dropped). C is what #23 builds (Jason's pick pending when this was written; B was the alternative).
+
+**Rule now (`RefitImage`, `fe_borderimg.*`):** the side margins are never squeezed. Each is a panel plus a 24 px rim along the window (`kOpeningRim`) that stays as drawn. A margin that grows scales its panel up evenly and crops it to the height, the left panel from the top and the right one from the bottom (Bezel Project covers keep the title logo top-left and the platform logo bottom-right); a margin that shrinks (Stretch 16:9) shows the outer part of the panel as drawn. Corners of the window as before; only the thin top and bottom rims still stretch (19 px to 92 px at 4x: they are flat dark glass, so it shows as a black band). A margin of 24 px or less has no panel and stretches whole as before.
+
+- Why it is still black above and below at Integer scale: a 4x picture is 896 of 1080 pixels tall, 184 px of frame that has no art of its own. B is the only variant without it.
+- The crop loses part of the cover (at 4x about 45% of its height per side). Anchoring top/bottom is a guess that fits the Bezel Project's layout; a custom border with the logo elsewhere loses it.
+- Tests: `test-border` TestFit (panel scaled evenly at 8:7: x=200,y=300 shows art at 138,207 not 300; rim 1:1 top to bottom; a shrunk margin is the outer part as drawn); a host render of the real border matched the mockups.
+- Open: unverified on a TV.
 
 ## Not verified
 
