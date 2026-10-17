@@ -59,7 +59,7 @@ One block cache for every file (start: 512 KiB blocks, below the SMB and NFS max
 
 Start from SwanStationPS5's list and add what Snes9x needs:
 
-`fopen fclose fread fseek fseeko ftell ftello rewind feof ferror fileno fgetc getc fgets fflush setvbuf flockfile funlockfile open close read pread lseek fstat stat lstat access realpath opendir readdir closedir`, plus `fopen64 fseeko64 ftello64` (minizip, `unzip/ioapi.c:23`), plus `fcntl` for socket flags (PS5 build only). Alternative for minizip: build it with `-DMINIZIP_FOPEN_NO_64`. Add the list to the EBOOT link (`ps5/Makefile:224-231`) and to the host test link (line 321). Any FILE function the code uses and the list misses will crash on a fake `FILE*`, so grep `ps5/` and the core for others before freezing the list.
+`fopen fclose fread fseek fseeko ftell ftello rewind feof ferror fileno fgetc getc fgets fflush setvbuf flockfile funlockfile open close read pread lseek fstat stat lstat access realpath opendir readdir closedir`, plus `fopen64 fseeko64 ftello64` on the host only (the console's libc has none, minizip maps them to the plain calls there; see [netfs-foundation.md](./netfs-foundation.md) decision 16), plus `fcntl` for socket flags (PS5 build only). Alternative for minizip: build it with `-DMINIZIP_FOPEN_NO_64`. Add the list to the EBOOT link (`ps5/Makefile:224-231`) and to the host test link (line 321). Any FILE function the code uses and the list misses will crash on a fake `FILE*`, so grep `ps5/` and the core for others before freezing the list.
 
 ## Library and UI changes (Phase 2)
 

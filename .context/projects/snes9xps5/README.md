@@ -45,6 +45,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [swanstation-nfs-reference.md](./swanstation-nfs-reference.md) | You implement or review anything copied in spirit from SwanStationPS5. |
 | [network-shares-plan.md](./network-shares-plan.md) | You work on SMB/NFS loading: goal, design, phases, open decisions. |
 | [network-shares-spec.md](./network-shares-spec.md) | You write the code: address format, per-file changes, tests, risks. |
+| [netfs-foundation.md](./netfs-foundation.md) | You touch `ps5/netfs/`: what exists, the choices made, what is unverified. |
 | [nfs-backend.md](./nfs-backend.md) | You touch `ps5/netfs/backend_nfs.cpp` or the vendored libnfs. |
 | [smb-backend.md](./smb-backend.md) | You touch the SMB backend (libsmb2) or debug an SMB share. |
 | [decisions/001-network-rom-loading.md](./decisions/001-network-rom-loading.md) | You question why netfs is built the way it is. |
@@ -60,3 +61,4 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | 2026-10-17 | SMB backend written, host-tested against Samba and built in CI (snes9xPS5#8); not run on a console. |
 | 2026-10-17 | Box art lookup for translated ROMs: implemented in a draft PR (words, extra CRC table, ROM header); host tests pass, console unverified. Covers for games libretro lacks now come from an embedded Hasheous/TheGamesDB table (step 7, 411 games), and `Front Mission - Gun Hazard` no longer gets `Front Mission`'s cover; a live per-ROM lookup stays open decision D4 and is not built. |
 | 2026-10-17 | Network shares screen (Settings > Network shares, with an on-screen keyboard, connection test, edit and remove) built on the netfs core; draft PR in snes9xPS5, unverified on console. |
+| 2026-10-17 | Network shares: the shared layer, cache, app wiring (CRC naming, late covers), NFS and SMB backends and the shares screen are on main (snes9xPS5 #7, #6, #8, #10), CI green. Nothing has run on a console yet; `.msu1` packs on a share are not prefetched. |
