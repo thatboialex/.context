@@ -24,11 +24,11 @@ These are the acceptance rules. Each has an automated check on the host unless n
 
 | # | Rule | Check |
 |---|---|---|
-| 1 | While a game runs, a read on the emulation thread waits at most 4 ms, then returns silence. An MSU-1 open is served from a prefetch; with no prefetch it waits one round trip and logs it. | Fake backend with 200 ms latency and hangs; loop-timing assertions. |
+| 1 | While a game runs, nothing on the emulation thread waits on the network. MSU-1 audio reads return data or silence at once, and opens come from memory. One documented exception: a miss inside an oversize `.msu` data file waits for the block, because skipping game data would corrupt the game. | Fake backend with 200 ms latency and hangs; loop-timing assertions. |
 | 2 | After load, a game without MSU-1 causes zero network reads. | Backend read counter stays 0 over 600 frames. |
 | 3 | Launch reads the ROM once, in order, and nothing else beyond the folder listing. Target: first frame under 1 s on gigabit for a 6 MiB ROM. | Backend bytes read equal the file size; time measured on console (unverified). |
 | 4 | Losing the connection never ends a running game. ROM games continue; MSU-1 tracks go silent with a notice. | Kill the fake backend mid-game. |
-| 5 | An MSU-1 underrun yields silence for the missing span and keeps time aligned. Underruns are logged. | Fake backend with 200 ms latency. |
+| 5 | An MSU-1 audio underrun yields silence for the whole requested span (never a short read: the core would end the track) and keeps time aligned. `.msu` data is never skipped or zero-filled. Underruns are logged. | Fake backend with 200 ms latency. |
 | 6 | The shelf opens at once. Local games first; network games join when the share is listed; the selection stays. | Host test with a share that never answers. |
 | 7 | Saves, states and cheats stay local. An offline share never delays saving. | Existing save tests, share offline. |
 
@@ -65,7 +65,7 @@ Sizes are relative effort, not time: S small, M medium, L large.
 | 1. netfs core + SMB | `ps5/netfs/`: vfs and wrap list, whole-file fetch, attribute cache, share state, watchdog, SMB backend, fake backend. Shares from `shares.txt`. Mount points added to `OrbisRomRoots()`. | Host tests pass. On the console a ROM from an SMB share plays and rules 1-4 hold. | L |
 | 2. Library and UI | Two-pass scan, background mount, rescan, NET badge, root labels, error notices, Network status screen, deferred CRC. | Shelf never blocks. 2,000 ROMs scan in about one round trip per folder on the fake backend. | M |
 | 3. NFS | NFS backend on vendored libnfs with the PS5 config. Export listing in errors. | Same tests run over both backends. | M |
-| 4. MSU-1 | Read-ahead ring for big files, track-head prefetch, silence on underrun. | Rule 5 holds on the fake backend. Console test with an MSU-1 hack. | M |
+| 4. MSU-1 | Read-ahead ring for big files, track-head and loop-point prefetch, silence on `.pcm` underrun, lossless `.msu` data. Measure real packs. | Rule 5 holds on the fake backend. Console test with an MSU-1 hack. | M |
 | 5. Polish | README section and credits. On-screen keyboard to add shares. Optional local ROM cache. Automatic retry. | Jason adds a share without FTP. | M |
 
 Each phase is its own PR to `snes9xPS5`. Phase 0 is not merged.

@@ -16,7 +16,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 ## Hard rules
 
 1. Do not edit files outside `ps5/`. Hook the core from `ps5/` (linker `--wrap`, frontend code).
-2. No network, disk or lock wait on the emulation, video or audio threads. Waits belong to worker threads.
+2. No network, disk or lock wait on the emulation, video or audio threads. Waits belong to worker threads. One documented exception: a miss inside an oversize MSU-1 `.msu` data file waits, because skipping data corrupts the game ([spec](./network-shares-spec.md), "Reads" item 6).
 3. Saves, states, cheats, covers and settings stay on the console under `/data/snes9x`. Network shares are read-only.
 4. Never log or display a password. Log share addresses with credentials removed.
 5. Match the neighbouring file's style (tabs and Allman braces in `fe_games.cpp`). New files start with `// SPDX-License-Identifier: MIT`.

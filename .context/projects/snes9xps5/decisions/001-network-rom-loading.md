@@ -17,7 +17,7 @@ Jason wants Snes9x PS5 to play ROMs from a drive behind a network server, with s
 
 1. Add a `netfs` layer in `ps5/netfs/` that serves virtual folders `/smb/<host>/<share>/...` and `/nfs/<host>/...`. It intercepts libc file calls with the linker's `--wrap`, so the core, minizip and zlib are untouched.
 2. Put the protocols behind one backend interface: libsmb2 for SMB, libnfs for NFS. SMB ships first (Jason's stated need); NFS follows. If the libsmb2 spike fails on the console, NFS goes first.
-3. Make ROM loading smooth by fetching the file whole through an adaptive read-ahead (window = whole file up to 16 MiB). After load the network is idle. Use the streaming cache only for large files (MSU-1), with a realtime mode that returns silence instead of blocking the emulation thread.
+3. Make ROM loading smooth by fetching the file whole through an adaptive read-ahead (window = whole file up to 16 MiB). After load the network is idle. Use the streaming cache only for large files (MSU-1), with a realtime mode in which `.pcm` audio reads return silence instead of blocking the emulation thread. MSU-1 `.msu` data is never skipped.
 4. Share the connection watchdog design (kill the socket when a request runs over 5 s), but a lost connection never ends a running game.
 5. Reimplement from the design. Do not copy SwanStationPS5 source. Vendor libsmb2 and libnfs (LGPL-2.1) with notices, and credit SwanStationPS5 in the README.
 6. Shares are configured in `/data/snes9x/shares.txt`, read-only on the share side. An on-screen keyboard comes later.
