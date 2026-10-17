@@ -1,7 +1,7 @@
 # ADR-005: Borders are painted once into the surface, and the picture goes in the art's window
 
 ## Status
-Proposed, 2026-10-17. Nothing is built. Becomes Accepted when the renderer change is on `main` and Jason has seen a border on the console. Unverified on hardware: the look at 1080p, the cost of the backdrop copy and the rim blend, memory.
+Proposed, 2026-10-17. Built and on snes9xPS5 `main` the same day (renderer #17, see [borders-built.md](../borders-built.md)); host-tested. Becomes Accepted when Jason has seen a border on the console. Unverified on hardware: the look at 1080p, the cost of the backdrop copy and the rim blend, memory.
 
 ## Context
 
@@ -17,7 +17,7 @@ The question: where does the border enter that pipeline so that it costs the emu
 
 1. **The border is composited once into a backdrop and copied into the surface at the moment the surface is cleared to black today.** From then on only the picture rectangle changes, so the border costs nothing per frame and is not sent to the scan-out buffer again.
 2. **The picture is drawn inside the border's window**, using the existing Aspect setting, not full screen with the border on top. The window is found from the PNG's alpha (flood fill from the centre; bounding box), with an `.ini` override.
-3. **The soft edge is a rim list.** Pixels of the border inside the window with alpha above 0 are kept as a short list and blended over the picture after it is drawn, every frame. It is tens of thousands of pixels, not two million.
+3. **The rim is a list.** Pixels of the border inside the window's box with alpha above 0 (rounded corners, edge pixels the window search did not call clear) are kept as a short list and blended over the picture after it is drawn, every frame. A soft edge of alpha 16 or more lies outside the window and stays in the backdrop. The built-in frame's rim is 1124 pixels, not two million.
 4. **Art is plain files in `/data/snes9x/borders/`**, 1920x1080 PNG with alpha, named like the Bezel Project's files so its pack drops in. Per-game art is found with the cover matcher. A built-in original frame is the fallback. No third-party art is bundled and nothing is downloaded in the first release.
 5. **Off by default** until Jason has used it on the console.
 

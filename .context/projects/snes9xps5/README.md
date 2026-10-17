@@ -63,6 +63,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [install-and-icons.md](./install-and-icons.md) | You touch the installer or `ProsperoMigrate`, or Jason sees a second Snes9x icon: what a send writes, what stays fixed, what makes a second icon. |
 | [borders-plan.md](./borders-plan.md) | You work on borders around the picture: goal, what SwanStationPS5 does, defaults, the three-thread split, acceptance. |
 | [borders-spec.md](./borders-spec.md) | You write the border code: interfaces between the threads, pack format, window detection, renderer changes, tests. |
+| [borders-built.md](./borders-built.md) | You touch `ProsperoVideo.*` border drawing or `ps5/frontend/fe_border*`: what the renderer and the pack code do beyond the spec, tests, what is unverified. |
 | [borders-ui.md](./borders-ui.md) | You touch the Border settings row, the built-in frame and its generator, the Borders section of the main README, or test group 35. |
 | [decisions/005-borders-baked-into-the-surface.md](./decisions/005-borders-baked-into-the-surface.md) | You question why the border is painted once into the surface and the picture goes in the art's window. |
 
@@ -78,5 +79,5 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | 2026-10-17 | Shelf tabs (Internal, USB, Network) and a PSFlycast-style Network tab: draft PR in snes9xPS5, host tests pass, unverified on console. Jason confirmed on the console that playing from a share works. |
 | 2026-10-17 | Cheats reload by themselves: a code added to the `.cht` file while a game runs (or with the cheat menu open) is applied without a restart. Draft PR in snes9xPS5, host-tested, console unverified. See [cheats.md](./cheats.md). |
 | 2026-10-17 | Second icon after installing a build: the installer, CI and `param.json` use one fixed title ID, so a new build updates `/data/homebrew/PPSA99922` in place; the installer now names every other folder carrying our content ID. Cause on the console not found yet. Draft PR in snes9xPS5, console unverified. See [install-and-icons.md](./install-and-icons.md). |
-| 2026-10-17 | Borders around the picture (like SwanStationPS5's bezels): plan, spec and ADR 005 written; split into renderer, pack/lookup and UI/default-art threads. Nothing built. |
+| 2026-10-17 | Borders around the picture (like SwanStationPS5's bezels): plan, spec and ADR 005 written; split into renderer, pack/lookup and UI/default-art threads; all three are on `main` (row below). |
 | 2026-10-17 | Borders are on snes9xPS5 `main`: the renderer (#17), the pack code and lookup (#16) and the Border row, built-in frame, docs and tests (#15, `d009cb7`). Off by default; host-tested, nothing seen on a console yet. See [borders-ui.md](./borders-ui.md). |
