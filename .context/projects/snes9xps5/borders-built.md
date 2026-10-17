@@ -1,8 +1,8 @@
 # Borders: what the renderer and the pack code built
 
-The "renderer" and "packs and lookup" threads' notes. Plan: [borders-plan.md](./borders-plan.md), spec: [borders-spec.md](./borders-spec.md), the Border row and built-in frame: [borders-ui.md](./borders-ui.md). Checked against snes9xPS5 `main` at `d009cb7` (2026-10-17).
+The "renderer" and "packs and lookup" threads' notes. Plan: [borders-plan.md](./borders-plan.md), spec: [borders-spec.md](./borders-spec.md), the Border row and built-in frame: [borders-ui.md](./borders-ui.md). Checked against snes9xPS5 `main` at `d009cb7` (2026-10-17); the section "Aspect ratio: the window follows the picture" at `a4c069a` (#20).
 
-Status: merged in order seam #14 (`bb6f39e`), pack and lookup #16 (`c34d035`), renderer #17 (`28654b8`), UI and frame #15 (`d009cb7`). Host-tested; nothing seen on a console.
+Status: merged in order seam #14 (`bb6f39e`), pack and lookup #16 (`c34d035`), renderer #17 (`28654b8`), UI and frame #15 (`d009cb7`), window follows the Aspect ratio setting #20 (`a4c069a`). Host-tested; nothing seen on a console.
 
 ## Renderer (`ps5/coreorbis/orbis-shims/ProsperoVideo.h/.cpp`)
 
@@ -18,7 +18,7 @@ Status: merged in order seam #14 (`bb6f39e`), pack and lookup #16 (`c34d035`), r
 - Beyond the spec: a border with over 400000 rim pixels (`kMaxRim`) is refused, logged, and the next choice applies; `games/<ROM name>.ini` with `off=1` works even with no picture of that name.
 - Test: `make -C ps5 test-border` and host test group 34. Host decode, window search and build took 14 ms at -O2 (reported by the thread); not measured on a console.
 
-## Aspect ratio: the window follows the picture (fix of 2026-10-17)
+## Aspect ratio: the window follows the picture (snes9xPS5#20, `a4c069a`, 2026-10-17)
 
 Jason: the border "only works in 4:3". Cause: the window was whatever the art drew (4:3 for The Bezel Project and the built-in frame), and the Aspect ratio setting only placed the picture inside it, so 8:7 left black bars in the glass and Stretch 16:9 filled a 4:3 hole.
 
