@@ -63,4 +63,5 @@ Update this table in the same change as the work.
 | Phase | State | PR / result |
 |---|---|---|
 | 0 | Draft PR (findings written) | [findings.md](./findings.md) |
-| 1 to 8 | Not started | |
+| 2 | Draft PR (D1 kept at `user/sdmc`) | [ProsperoEden #6](https://github.com/thatboialex/ProsperoEden/pull/6) |
+| 1, 3 to 8 | Not started | |

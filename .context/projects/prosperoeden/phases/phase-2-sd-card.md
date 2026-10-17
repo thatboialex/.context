@@ -41,4 +41,21 @@ Launcher UI (phase 4), per-profile SD cards (D2), anything Skyline-specific.
 Host check as above. Sonnet reviewer checks: no waits on hot threads, folder never created behind the player's back, style of neighbours. Eden patch (if any) goes to an Opus reviewer.
 
 ## Result
-State: Not started
+State: Draft PR
+PR: https://github.com/thatboialex/ProsperoEden/pull/6
+Changed:
+- `headless/sd_card.h` (new): the folder's path and state (missing, read-only, writable); looks only, never creates.
+- `headless/sd_card_check.cpp` (new) and `headless/CMakeLists.txt`, `tools/build-headless-host.sh`: the host check, built and run with the others.
+- `headless/CMakeLists.txt`: `eden_patch` on the derived `path_util.cpp` so the path manager's start-up pass skips `SDMCDir`.
+- `headless/main.cpp`: one `[ProsperoEden] sd card:` log line after `CreateFactories`.
+- `docs/INSTALL.md` (layout diagram, "SD card folder" section), `docs/CHANGELOG.md` ("Next version").
+Decisions: D1 **kept** at `user/sdmc` (recommended option on the decision card; Jason had not answered when the PR was opened, so it is the default and moving it is still open).
+- Lazy creation: Eden's `CreateFactories` runs at every game start and makes `sdmc/Nintendo/Contents/...`, so the folder exists after the first game start, not after app start. `vfs.OpenDirectory` never creates, and `RegisteredCache` returns early on a null directory (`eden:registered_cache.cpp:717`), so a read-only drive does not crash that step **[source only]**.
+- Free space: `GetSDMCFreeSpace` is reached through `fsp-srv` free-space calls (`eden:filesystem.cpp:454,480`). A grep of Skyline `2eb226f` and ARCropolis `bf2005b` finds no call to any free-space or total-space function. Nothing built; the game itself might call it, which only a large-mods run shows (protocol, phase 5 row).
+- Case: not built, as the phase said. The case run in the protocol decides.
+Unverified: the folder is not made at app start and is made at game start (console); the `sd card:` log line; read-only drive start; that the `eden_patch` applies (configure) and builds, because the cloud container cannot download dependencies. `make test` not run; `sd_card_check` compiled and run alone, as root and as a non-root user.
+Notes for the next session:
+- The path-manager change is an Eden source patch: per the phase it goes to an Opus reviewer.
+- Phase 4 can read the folder state from `Eden::SdCard::StateOf(Eden::SdCard::Dir())`.
+- Phase 3/5 find `sd:/` at `user/sdmc`; `ultimate/` goes directly under it. FTP to `/data/prosperoeden/user/sdmc/ultimate/mods/`.
+- The changelog has no unreleased section upstream; "Next version" was added at the top and the maintainer renames it at release.
