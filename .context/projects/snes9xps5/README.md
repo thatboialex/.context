@@ -66,6 +66,8 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [borders-built.md](./borders-built.md) | You touch `ProsperoVideo.*` border drawing or `ps5/frontend/fe_border*`: what the renderer and the pack code do beyond the spec, tests, what is unverified. |
 | [borders-ui.md](./borders-ui.md) | You touch the Border settings row, the built-in frame and its generator, the Borders section of the main README, or test group 35. |
 | [decisions/005-borders-baked-into-the-surface.md](./decisions/005-borders-baked-into-the-surface.md) | You question why the border is painted once into the surface and the picture goes in the art's window. |
+| [borders-download.md](./borders-download.md) | You touch the border downloads: the name index, `fe_borderfetch.*`, the watcher in `fe_border.cpp`, the helper's borders lane, Settings > Download all borders, test group 36. |
+| [decisions/006-borders-downloaded-from-the-bezel-project.md](./decisions/006-borders-downloaded-from-the-bezel-project.md) | You question where per-game border art comes from, the licence situation, or what Jason still has to decide. |
 
 ## Status
 
@@ -81,3 +83,4 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | 2026-10-17 | Second icon after installing a build: the installer, CI and `param.json` use one fixed title ID, so a new build updates `/data/homebrew/PPSA99922` in place; the installer now names every other folder carrying our content ID. Cause on the console not found yet. Draft PR in snes9xPS5, console unverified. See [install-and-icons.md](./install-and-icons.md). |
 | 2026-10-17 | Borders around the picture (like SwanStationPS5's bezels): plan, spec and ADR 005 written; split into renderer, pack/lookup and UI/default-art threads; all three are on `main` (row below). |
 | 2026-10-17 | Borders are on snes9xPS5 `main`: the renderer (#17), the pack code and lookup (#16) and the Border row, built-in frame, docs and tests (#15, `d009cb7`). Off by default; host-tested, nothing seen on a console yet. See [borders-ui.md](./borders-ui.md). |
+| 2026-10-17 | Per-game borders out of the box: Auto downloads the game's SNES border from The Bezel Project (like SwanStationPS5 does for PS1), through the helper, and puts it up while the game runs; Settings > Download all borders for the library. The licence of those pictures is not stated: ADR 006 is for Jason to decide. Draft PR in snes9xPS5, host-tested, console unverified. See [borders-download.md](./borders-download.md). |
