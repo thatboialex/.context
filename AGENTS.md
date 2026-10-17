@@ -11,6 +11,8 @@ Two files, every time:
 - `.context/ai-rules.md`: project-wide hard constraints
 - `.context/glossary.md`: terminology
 
+For a task about a named project, read `.context/projects/<name>/README.md` first (`snes9xps5` = `thatboialex/snes9xPS5`). Its rules override the web-service defaults above.
+
 ## Path-scoped rules
 
 Load only when touching matching files. Full rule files live in `.claude/rules/`.
