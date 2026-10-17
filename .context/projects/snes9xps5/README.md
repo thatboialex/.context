@@ -46,6 +46,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [network-shares-plan.md](./network-shares-plan.md) | You work on SMB/NFS loading: goal, design, phases, open decisions. |
 | [network-shares-spec.md](./network-shares-spec.md) | You write the code: address format, per-file changes, tests, risks. |
 | [nfs-backend.md](./nfs-backend.md) | You touch `ps5/netfs/backend_nfs.cpp` or the vendored libnfs. |
+| [smb-backend.md](./smb-backend.md) | You touch the SMB backend (libsmb2) or debug an SMB share. |
 | [decisions/001-network-rom-loading.md](./decisions/001-network-rom-loading.md) | You question why netfs is built the way it is. |
 | [box-art-lookup-plan.md](./box-art-lookup-plan.md) | You work on cover lookup for renamed or fan-translated ROMs: goal, design, acceptance. |
 | [decisions/002-box-art-name-matching.md](./decisions/002-box-art-name-matching.md) | You question why art names are matched by words and the ROM header. |
@@ -55,6 +56,7 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 
 | Date | State |
 |---|---|
-| 2026-10-17 | Network shares: plan written, no code. Next step is Phase 0 (spikes) in the plan. |
+| 2026-10-17 | Network shares: plan approved and being built as draft PRs in snes9xPS5 (shared layer #7, NFS backend #6). Phase 0 spikes still need a console. |
+| 2026-10-17 | SMB backend written, host-tested against Samba and built in CI (snes9xPS5#8); not run on a console. |
 | 2026-10-17 | Box art lookup for translated ROMs: implemented in a draft PR (words, extra CRC table, ROM header); host tests pass, console unverified. Covers for games libretro lacks now come from an embedded Hasheous/TheGamesDB table (step 7, 411 games), and `Front Mission - Gun Hazard` no longer gets `Front Mission`'s cover; a live per-ROM lookup stays open decision D4 and is not built. |
 | 2026-10-17 | Network shares screen (Settings > Network shares, with an on-screen keyboard, connection test, edit and remove) built on the netfs core; draft PR in snes9xPS5, unverified on console. |
