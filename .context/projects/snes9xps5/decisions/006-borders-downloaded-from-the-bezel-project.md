@@ -26,8 +26,8 @@ No source is clearly redistributable for per-game SNES art. The only per-game se
 
 ## Decision
 
-1. **The app carries names, not pictures.** `ps5/frontend/data/snes-border-index.txt` lists the 1445 names The Bezel Project has (`ps5/tools/make_border_index.py` reads them from the repository's tree; no picture is downloaded to make it). Nothing from The Bezel Project's pictures is in the ELF or in our repositories.
-2. **Source: The Bezel Project, as SwanStationPS5 does.** The console downloads `GameBezels/SNES/<name>.png` from `raw.githubusercontent.com` through the helper (the app cannot download after its jailbreak, same as covers), into `/data/snes9x/borders/games/<name>.png`, under the project's own name. These are the files the drop-in format already expects.
+1. **The app carries names, not pictures.** `ps5/frontend/data/snes-border-index.txt` lists the names The Bezel Project has: 1445 from `bezelproject-SNES` (USA and World) and, after a `#@ SFC` line, 2685 from `bezelproject-SFC` (Japan, Europe and the other regions; added 2026-10-17, see the amendment under Consequences). `ps5/tools/make_border_index.py` reads them from the repositories' trees; no picture is downloaded to make it. Nothing from The Bezel Project's pictures is in the ELF or in our repositories.
+2. **Source: The Bezel Project, as SwanStationPS5 does.** The console downloads `GameBezels/SNES/<name>.png` (from `bezelproject-SNES`) or `GameBezels/SFC/<name>.png` (from `bezelproject-SFC`, for the names in the index's SFC section) from `raw.githubusercontent.com` through the helper (the app cannot download after its jailbreak, same as covers), into `/data/snes9x/borders/games/<name>.png`, under the project's own name. These are the files the drop-in format already expects.
 3. **When.** Border on Auto and the game has no border of its own (no own file, no match in the pack): the app finds the game's name in the index with the cover matcher (so a European release, a revision or a translation gets the original game's border), asks the helper for it first in line (`borders/priority.txt`), keeps the built-in frame up, and puts the border up when the file lands, from a watcher thread, never on the emulation thread. Settings > Download all borders asks for the whole library in the background (`borders/wanted.txt`, after the covers).
 4. **Off switches.** Border Off and Default frame never touch the network. `border_download=0` in `snes9x-ps5.ini` turns downloading off for Auto. A 404 is remembered for 30 days (`<name>.missing`), as for covers.
 5. **Nothing is asked of a game with a border of its own** (an own file, a match in the pack, an `.ini` with `off=1`).
@@ -47,7 +47,7 @@ No source is clearly redistributable for per-game SNES art. The only per-game se
 ## Consequences
 
 ### Positive
-- Per-game art for about 56% of the No-Intro SNES names (2388 of 4268, measured with the real matcher: 1286 by exact name, 1102 by region, revision or translation matching), nearly all USA and Europe releases; Japan-only games (1469 of the 1880 without) keep the default or built-in frame.
+- Per-game art for about 56% of the No-Intro SNES names (2388 of 4268, measured with the real matcher: 1286 by exact name, 1102 by region, revision or translation matching), nearly all USA and Europe releases; Japan-only games (1469 of the 1880 without) keep the default or built-in frame. **Amended 2026-10-17:** that read only `bezelproject-SNES`; the Japan, Europe and other regions' borders are in the sibling `bezelproject-SFC` (same format, no name in common, same licence position), and the index now lists both: 4149 of 4268, Japan 1837 of 1870. See `borders-download.md`.
 - The user's own pictures still win; the drop-in works as before.
 - One more lane in the helper's existing download loop; no new thread in the helper, no second TLS client.
 
