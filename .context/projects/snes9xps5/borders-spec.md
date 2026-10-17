@@ -83,7 +83,7 @@ void Release();
 
 1. The pixel at (960, 540) must have alpha below 16, else refuse ("no clear centre").
 2. Flood fill (4-connected, explicit stack, no recursion) over pixels with alpha below 16 from there.
-3. The window is the bounding box of the filled region. Refuse if it is under 480x270.
+3. The window is the bounding box of the filled region. Refuse if it is under 480x270. A pixel with alpha 16 or more is never part of the filled region, so a soft edge normally lies just *outside* the window and stays in the backdrop; the rim is then the pixels of alpha 1 to 255 inside the box (rounded corners, edge pixels of alpha 1 to 15). The built-in frame's rim is 1124 pixels.
 4. Measured on five SNES bezels (plan, "What snes9xPS5 does today"): x 261, y 20, w 1398, h 1038 give or take a pixel. A unit test builds a PNG with that window and a soft edge.
 
 ## Building the border (B)

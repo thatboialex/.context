@@ -1,12 +1,12 @@
 # Plan: borders around the picture
 
-Status: Proposed, 2026-10-17. Requested by Jason ("similar to how SwanStationPS5 has the PS1 borders and graphics while playing a game"). Nothing is built. Formats and code seams: [borders-spec.md](./borders-spec.md). Key decision: [ADR 005](./decisions/005-borders-baked-into-the-surface.md).
+Status: Built and on snes9xPS5 `main`, 2026-10-17 (seam #14, renderer #17, pack and lookup #16, UI and built-in frame #15); host-tested, nothing seen on a console. What the threads built beyond this plan: [borders-built.md](./borders-built.md), [borders-ui.md](./borders-ui.md). Requested by Jason ("similar to how SwanStationPS5 has the PS1 borders and graphics while playing a game"). Formats and code seams: [borders-spec.md](./borders-spec.md). Key decision: [ADR 005](./decisions/005-borders-baked-into-the-surface.md).
 
 ## Goal
 
 While a game runs, the area around the SNES picture shows art: a frame the game or the console would have had, instead of black bars. The picture sits in a window of the art. It must cost the emulation nothing measurable, work with every shader and aspect ratio, and be easy to extend by dropping files on the console.
 
-Non-goals (first release): downloading art, animated borders, art drawn over the picture (except the soft edge of the glass), changing the shelf, a border editor.
+Non-goals (first release): downloading art, animated borders, art drawn over the picture (except the corners and edge pixels of the glass inside the window), changing the shelf, a border editor.
 
 ## What SwanStationPS5 does (read 2026-10-17, commit `f7bea88`, GPL: design only, no code copied)
 
@@ -43,8 +43,8 @@ What the Bezel Project SNES set looks like (`thebezelproject/bezelproject-SNES`,
 The thing that makes this cheap: because only the picture rectangle changes from frame to frame, the border is **painted once into the surface** and never touched again, exactly where the black fill goes today ([ADR 005](./decisions/005-borders-baked-into-the-surface.md)).
 
 1. A **border** is a 1920x1080 PNG with alpha. The **window** is its clear hole, found automatically (or given in a small `.ini`). The picture is drawn **inside the window** with the player's aspect setting.
-2. When a border is loaded, the app builds a **backdrop** (the PNG composited on black, window black) and a short list of **rim** pixels (alpha between 1 and 254 inside the window, the soft edge of the glass).
-3. `DrawSnes` copies the backdrop into the surface where it now fills black, draws the picture as before, then blends the rim pixels over the picture. Per frame that is a few tens of thousands of pixels; everything else is untouched and not re-sent to the scan-out buffer. Estimate, not measured on a console.
+2. When a border is loaded, the app builds a **backdrop** (the PNG composited on black, window black) and a short list of **rim** pixels (alpha 1 to 255 inside the window's box: rounded corners and any edge pixel the window search did not call clear).
+3. `DrawSnes` copies the backdrop into the surface where it now fills black, draws the picture as before, then blends the rim pixels over the picture. Per frame that is the rim only: 1124 pixels for the built-in frame (four corner pieces), more for art whose edge has pixels of alpha 1 to 15 inside the window; the pack code refuses a border with over 400000 rim pixels. Everything else is untouched and not re-sent to the scan-out buffer. Cost on a console not measured.
 4. The border is chosen when a game loads and when the setting changes, never on a worker the emulation waits for.
 
 ### Defaults chosen (change them by saying so)
