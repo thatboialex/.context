@@ -46,9 +46,12 @@ Snes9x 1.63 as a native PS5 home-screen app (title ID PPSA99922) for jailbroken 
 | [network-shares-plan.md](./network-shares-plan.md) | You work on SMB/NFS loading: goal, design, phases, open decisions. |
 | [network-shares-spec.md](./network-shares-spec.md) | You write the code: address format, per-file changes, tests, risks. |
 | [decisions/001-network-rom-loading.md](./decisions/001-network-rom-loading.md) | You question why netfs is built the way it is. |
+| [box-art-lookup-plan.md](./box-art-lookup-plan.md) | You work on cover lookup for renamed or fan-translated ROMs: goal, design, acceptance. |
+| [decisions/002-box-art-name-matching.md](./decisions/002-box-art-name-matching.md) | You question why art names are matched by words and the ROM header. |
 
 ## Status
 
 | Date | State |
 |---|---|
 | 2026-10-17 | Network shares: plan written, no code. Next step is Phase 0 (spikes) in the plan. |
+| 2026-10-17 | Box art lookup for translated ROMs: plan and ADR 002 written; implementation in progress. |
