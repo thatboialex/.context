@@ -2,6 +2,8 @@
 
 How Jason tests a phase on the console. Cloud threads cannot run it. A thread that needs a run writes the exact steps for its phase here under "Runs" and asks Jason once.
 
+A PC run on stock Eden can settle some of the questions below before the console is used; see [pc-test-plan.md](./pc-test-plan.md) for what it can and cannot show.
+
 ## Setup (once, phase 1 completes this)
 
 1. Console on the pinned ProsperoEden release or the build from the PR (`make install PS5_HOST=<address>`, or the release ZIP).

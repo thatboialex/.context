@@ -50,6 +50,7 @@ Run **Skyline** (code-injection framework) and **ARCropolis** (Smash Ultimate mo
 | [hardware-test-protocol.md](./hardware-test-protocol.md) | You need Jason to test on the console, or write a test step. |
 | [phases/](./phases/) | One file per phase, `phase-N-name.md`. Read only yours. |
 | [decisions/001-user-supplied-skyline.md](./decisions/001-user-supplied-skyline.md) | You question why Skyline and ARCropolis are not bundled. |
+| [pc-test-plan.md](./pc-test-plan.md) | You run (or write steps for) a test on a PC with stock Eden, before or beside a console run. Written for Codex or Claude Code on Jason's computer. |
 | [findings.md](./findings.md) | You need a verified fact about Eden, Skyline or ARCropolis. |
 | [emulator-reference.md](./emulator-reference.md) | You want to see how Ryujinx and yuzu (via Eden) ran Skyline and ARCropolis. |
 
@@ -59,5 +60,6 @@ Run **Skyline** (code-injection framework) and **ARCropolis** (Smash Ultimate mo
 |---|---|
 | 2026-10-17 | Plan and phase docs written (draft PR in `.context`). No code started. |
 | 2026-10-17 | Phase 0 done: `findings.md`. Smash 13.0.5 only; Eden already supports what Skyline needs; the SD card already exists; `make test` cannot run in the cloud container. |
+| 2026-10-18 | PC test plan written: stock Eden at the pin, Skyline, ARCropolis, `make test` ([pc-test-plan.md](./pc-test-plan.md)). Not run yet. |
 | 2026-10-17 | Phase 4 draft PR: the Library and home screen show `Skyline, 12 ARC mods` or `Skyline off` ([ProsperoEden #7](https://github.com/thatboialex/ProsperoEden/pull/7), stacked on #6). |
 | 2026-10-17 | Phase 2 draft PR: SD card folder kept at `user/sdmc`, documented, made when a game starts ([ProsperoEden #6](https://github.com/thatboialex/ProsperoEden/pull/6)). |
